@@ -20,7 +20,7 @@
        (alltodo "" nil))
       nil)))
  '(org-agenda-files
-   '("~/Documents/school/religion-history/columbus.org" "~/Documents/agenda/uktrip.org" "~/Documents/school/programming/notes/course.org" "~/Documents/agenda/chores.org" "~/Documents/agenda/school.org" "~/Documents/agenda/shoppinglist.org" "~/Documents/agenda/configs.org" "~/Documents/school/ee/ee.org"))
+   '("~/Documents/agenda/chores.org" "~/Documents/agenda/school.org" "~/Documents/agenda/shoppinglist.org" "~/Documents/agenda/configs.org" "~/Documents/school/ee/ee.org"))
  '(org-export-backends '(ascii beamer html icalendar latex odt))
  '(org-export-headline-levels 5)
  '(org-export-with-toc nil)
@@ -37,7 +37,7 @@
  '(message-header-subject ((t (:foreground "color-23" :weight bold))))
  '(message-header-to ((t (:foreground "color-23" :weight bold))))
  '(mode-line ((t (:background "#222226" :foreground "#b2b2b2" :box nil :height 1.0))))
- '(mode-line-inactive ((t (:inherit mode-line :background "#222226" :foreground "#b2b2b2" :box nil :weight light))))
+ '(mode-line-inactive ((t (:inherit mode-line :background "#111111" :foreground "#b2b2b2" :box nil :weight light))))
  '(notmuch-message-summary-face ((t nil)))
  '(notmuch-tag-face ((t (:foreground "brightblue" :weight bold))))
  '(region ((t (:background "#444444")))))

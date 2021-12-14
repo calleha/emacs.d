@@ -1,5 +1,4 @@
-; Emacs config
-
+;; Emacs config
 ;;;* Extensions
 ;;;** package
 
@@ -174,6 +173,12 @@
 ;; C-c e to toggle electric-pair-mode
 (global-set-key (kbd "C-c e") 'electric-pair-mode)
 
+;; C-c n to toggle display-line-numbers-mode
+(global-set-key (kbd "C-c n") 'display-line-numbers-mode)
+
+;; C-c C-b to toggle menu-bar-mode
+(global-set-key (kbd "C-c C-b") 'menu-bar-mode)
+
 ;; C-c d to toggle pdf-view-midnight-minor-mode
 (global-set-key (kbd "C-c d") 'pdf-view-midnight-minor-mode)
 
@@ -204,12 +209,12 @@
 (global-set-key (kbd "C-x 2") 'split-window-below-and-move)
 (global-set-key (kbd "C-x 3") 'split-window-right-and-move)
 
-;; kill-whole-word with C-c w
+;; kill-whole-word with C-x w
 (defun kill-whole-word ()
   (interactive)
   (forward-word)
   (backward-kill-word 1))
-(global-set-key (kbd "C-c w") 'kill-whole-word)
+(global-set-key (kbd "C-x w") 'kill-whole-word)
 
 ;; C-w for backward-kill-word, unless there is a region selected
 (defadvice kill-region (before unix-werase activate compile)
@@ -257,7 +262,7 @@
 ;;(define-key notmuch-show-mode-map (kbd "/") 'notmuchsearch)
 ;;(define-key notmuch-hello-mode-map (kbd "/") 'notmuchsearch)
 
-;;;* Outline mode in .emacs
+;;;* Outline mode in init.el
 (add-hook 'emacs-lisp-mode-hook 
           (lambda ()
             (make-local-variable 'outline-regexp)
