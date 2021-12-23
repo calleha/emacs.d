@@ -147,8 +147,6 @@
 
 ;; modeline
 (column-number-mode 1)
-(set-face-attribute 'mode-line           nil :background "#222226" :foreground "#b2b2b2" :box nil)  
-;;#1A1A1B
 
 ;; font
 ;(add-to-list 'default-frame-alist

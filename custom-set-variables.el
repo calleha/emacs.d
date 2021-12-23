@@ -3,6 +3,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(Spacemacs-ish))
+ '(custom-safe-themes
+   '("a5ce5375c00fec65089ddf30977049c6bf327ce9a38fac27d43f3b08bdc87549" default))
+ '(display-time-mode t)
  '(mail-host-address "thinkpad")
  '(notmuch-saved-searches
    '((:name "inbox" :query "tag:inbox" :key "i" :sort-order newest-first)
@@ -22,25 +26,17 @@
  '(org-agenda-files
    '("~/Documents/agenda/chores.org" "~/Documents/agenda/school.org" "~/Documents/agenda/shoppinglist.org" "~/Documents/agenda/configs.org" "~/Documents/school/ee/ee.org"))
  '(org-export-backends '(ascii beamer html icalendar latex odt))
- '(org-export-headline-levels 5)
  '(org-export-with-toc nil)
  '(package-selected-packages
    '(csharp-mode which-key sudo-edit gnuplot gnuplot-mode pdf-tools dmenu mc-extras multiple-cursors company-ycmd ycmd slime-company slime company org xclip ##)))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((((type x)) (:inherit nil :stipple nil :background "#292b2e" :foreground "#b2b2b2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 113 :width normal :foundry "PfEd" :family "DejaVu Sans Mono"))))
- '(cursor ((t (:background "#e3dedd"))))
- '(highlight ((t (:background "#444444"))))
- '(message-header-subject ((t (:foreground "color-23" :weight bold))))
- '(message-header-to ((t (:foreground "color-23" :weight bold))))
- '(mode-line ((t (:background "#222226" :foreground "#b2b2b2" :box nil :height 1.0))))
- '(mode-line-inactive ((t (:inherit mode-line :background "#111111" :foreground "#b2b2b2" :box nil :weight light))))
  '(notmuch-message-summary-face ((t nil)))
- '(notmuch-tag-face ((t (:foreground "brightblue" :weight bold))))
- '(region ((t (:background "#444444")))))
+ '(notmuch-tag-face ((t (:foreground "brightblue" :weight bold)))))
  ;not terminal friendly;'(region ((t (:background "#444155")))))
 
 ;; enabled functions
