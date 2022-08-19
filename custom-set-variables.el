@@ -5,8 +5,9 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(Spacemacs-ish))
  '(custom-safe-themes
-   '("a5ce5375c00fec65089ddf30977049c6bf327ce9a38fac27d43f3b08bdc87549" default))
+   '("67a817ac588945bb249a0979e8f733758291267b6e7b1da0f1f969038c74cf02" "a5ce5375c00fec65089ddf30977049c6bf327ce9a38fac27d43f3b08bdc87549" default))
  '(display-time-mode t)
+ '(inhibit-startup-screen t)
  '(mail-host-address "thinkpad")
  '(notmuch-saved-searches
    '((:name "inbox" :query "tag:inbox" :key "i" :sort-order newest-first)
@@ -28,7 +29,7 @@
  '(org-export-backends '(ascii beamer html icalendar latex odt))
  '(org-export-with-toc nil)
  '(package-selected-packages
-   '(csharp-mode which-key sudo-edit gnuplot gnuplot-mode pdf-tools dmenu mc-extras multiple-cursors company-ycmd ycmd slime-company slime company org xclip ##)))
+   '(vterm csharp-mode which-key sudo-edit gnuplot gnuplot-mode pdf-tools dmenu mc-extras multiple-cursors company-ycmd ycmd slime-company slime company org xclip ##)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

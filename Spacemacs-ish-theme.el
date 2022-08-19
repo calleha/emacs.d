@@ -14,7 +14,8 @@
  '(message-header-to ((t (:foreground "color-23" :weight bold))))
  '(mode-line ((t (:background "#222226" :foreground "#f6f3e8" :box nil :height 1.0))))
  '(region ((t (:background "#444444"))))
- '(mode-line-inactive ((t (:inherit mode-line :background "#222226" :foreground "#857b6f" :box nil :weight light)))))
+ '(mode-line-inactive ((t (:inherit mode-line :background "#222226" :foreground "#857b6f" :box nil :weight light))))
+ '(fringe ((t (:background "#292b2e")))))
 ;; mode-line-inactive alternate foreground "#b2b2b2"
 
 (provide-theme 'Spacemacs-ish)

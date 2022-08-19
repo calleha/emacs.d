@@ -103,6 +103,7 @@
 (add-hook 'notmuch-show-mode-hook (lambda () (display-line-numbers-mode -1)))
 (add-hook 'notmuch-hello-mode-hook (lambda () (display-line-numbers-mode -1)))
 (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
+(add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 ;; scroll line by line
 (setq scroll-step 1)
@@ -131,7 +132,7 @@
 (tooltip-mode -1)
 
 ;; remove fringes
-(fringe-mode '(0 . 0))
+;;(fringe-mode '(0 . 0))
 
 ;; colors
 (set-background-color "#292b2e")
@@ -190,8 +191,11 @@
 ;; C-; for other-window (default: C-x o)
 (global-set-key (kbd "C-;") 'other-window)
 
-;; C-: for previous-buffer (default: C-x <left>)
-(global-set-key (kbd "C-:") 'previous-buffer)
+;; C-<tab> for next-buffer (default: C-x <left>)
+(global-set-key (kbd "C-<tab>") 'next-buffer)
+
+;; C-<return> for vterm
+(global-set-key (kbd "C-<return>") 'vterm)
 
 ;;;** Larger keybindings (custom functions)
 
@@ -207,12 +211,12 @@
 (global-set-key (kbd "C-x 2") 'split-window-below-and-move)
 (global-set-key (kbd "C-x 3") 'split-window-right-and-move)
 
-;; kill-whole-word with C-x w
+;; kill-whole-word with C-c w
 (defun kill-whole-word ()
   (interactive)
   (forward-word)
   (backward-kill-word 1))
-(global-set-key (kbd "C-x w") 'kill-whole-word)
+(global-set-key (kbd "C-c w") 'kill-whole-word)
 
 ;; C-w for backward-kill-word, unless there is a region selected
 (defadvice kill-region (before unix-werase activate compile)
