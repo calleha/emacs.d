@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(Spacemacs-ish))
  '(custom-safe-themes
-   '("67a817ac588945bb249a0979e8f733758291267b6e7b1da0f1f969038c74cf02" "a5ce5375c00fec65089ddf30977049c6bf327ce9a38fac27d43f3b08bdc87549" default))
+   '("09df676b50ab963e0475a17381cf6b4759063b70cd8a86e980db80ff8456f8f7" "5ea9e2081d3f0085eb88b91ad2061ad4c71c56e97b4d933c1e923fdc7b9fd342" "67a817ac588945bb249a0979e8f733758291267b6e7b1da0f1f969038c74cf02" "a5ce5375c00fec65089ddf30977049c6bf327ce9a38fac27d43f3b08bdc87549" default))
  '(display-time-mode t)
  '(inhibit-startup-screen t)
  '(mail-host-address "thinkpad")
@@ -24,12 +24,11 @@
       ((agenda "" nil)
        (alltodo "" nil))
       nil)))
- '(org-agenda-files
-   '("~/Documents/agenda/chores.org" "~/Documents/agenda/school.org" "~/Documents/agenda/shoppinglist.org" "~/Documents/agenda/configs.org" "~/Documents/school/ee/ee.org"))
+ '(org-agenda-files '("/home/calleha/Documents/reminders.org"))
  '(org-export-backends '(ascii beamer html icalendar latex odt))
  '(org-export-with-toc nil)
  '(package-selected-packages
-   '(vterm csharp-mode which-key sudo-edit gnuplot gnuplot-mode pdf-tools dmenu mc-extras multiple-cursors company-ycmd ycmd slime-company slime company org xclip ##)))
+   '(org-modern org-ai mini-modeline exwm-modeline zygospore sudo-edit vterm org org-ref pdf-tools dmenu eglot csharp-mode company yasnippet exwm-edit exwm gnuplot gnuplot-mode mc-extras multiple-cursors slime-company slime which-key xclip ##)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

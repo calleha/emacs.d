@@ -3,7 +3,8 @@
 
 (custom-theme-set-variables
  'Spacemacs-ish
- '(package-selected-packages '(csharp-mode which-key sudo-edit gnuplot gnuplot-mode pdf-tools dmenu mc-extras multiple-cursors company-ycmd ycmd slime-company slime company org xclip ##)))
+ ;; '(package-selected-packages '(csharp-mode which-key sudo-edit gnuplot gnuplot-mode pdf-tools dmenu mc-extras multiple-cursors slime-company slime company org xclip ##))
+ )
 
 (custom-theme-set-faces
  'Spacemacs-ish

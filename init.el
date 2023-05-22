@@ -20,23 +20,19 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 
-
-;; add org to elpa
-;(require 'package)
-;(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
-
-;; LaTeX export
-;;(require 'ox-latex)
-;;(unless (boundp 'org-latex-classes)
-;;  (setq org-latex-classes nil))
-;;(add-to-list 'org-latex-classes
-;;             '("article"
-;;               "\\documentclass{article}"
-;;               ("\\section{%s}" . "\\section*{%s}")))
-
 ;; org-ref
 (autoload 'org-ref "org-ref" "org-ref" t)
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+
+;;;** org-ai
+(add-hook 'org-mode-hook #'org-ai-mode)
+(org-ai-global-mode)
+(global-set-key (kbd "C-c p") 'org-ai-prompt)
+(global-set-key (kbd "C-c e") 'org-ai-explain-code)
+
+;;;** org-modern
+(add-hook 'org-mode-hook #'org-modern-mode)
+(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 
 ;;;** enable xclip
 (add-to-list 'load-path "~/.emacs.d/elpa/xclip-1.4/")
@@ -64,13 +60,6 @@
 ;(setq inferior-lisp-program "/usr/bin/sbcl")
 ;(slime-setup '(slime-fancy slime-company))
 
-;;;** ycmd
-;(require 'ycmd)
-;(add-hook 'after-init-hook 'global-ycmd-mode)
-
-;; company-ycmd for autocompletion
-;(require 'company-ycmd)
-;(company-ycmd-setup)
 ;;;** multiple-cursors
 (autoload 'multiple-cursors "multiple-cursors" "edit with multiple cursors" t)
 
@@ -93,6 +82,11 @@
                                  ,(face-attribute 'default :background)))
 ;;;** which-key
 (which-key-mode 1)
+;;;** zygospore (reversible C-x 1)
+(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
+;;;** mini-modeline
+(global-set-key (kbd "C-c h") 'mini-modeline-mode)
+
 ;;;* Settings
 ;;;** Functionality settings
 
@@ -105,6 +99,8 @@
 (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
 (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
 
+(visual-line-mode)
+
 ;; scroll line by line
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
@@ -113,15 +109,19 @@
 ; auto-revert-mode (auto refresh)
 (add-hook 'pdf-view-mode-hook 'auto-revert-mode)
 
-; display time
+; display time and battery
 (setq display-time-24hr-format t)
 (display-time-mode 1)
+(display-battery-mode 1)
 
 ; disable ~files
 (setq make-backup-files nil)
 
 ; enable dead keys
 (require 'iso-transl)
+
+; enable recursive minibuffers
+(setq enable-recursive-minibuffers 1)
 
 ;;;** Aesthetics
 
@@ -164,13 +164,13 @@
 ;;(require 'misc)
 ;;(global-set-key (kbd "M-f") 'forward-to-word)
 
-;;;** Smaller keybindings
+;;;** Custom keybindings
 
 ;; C-c q to toggle visual-line-mode
 (global-set-key (kbd "C-c q") 'visual-line-mode)
 
-;; C-c e to toggle electric-pair-mode
-(global-set-key (kbd "C-c e") 'electric-pair-mode)
+;; C-c e to toggle electric-pair-mode (disabled, binding used by org-ai)
+;;(global-set-key (kbd "C-c e") 'electric-pair-mode)
 
 ;; C-c n to toggle display-line-numbers-mode
 (global-set-key (kbd "C-c n") 'display-line-numbers-mode)
@@ -181,12 +181,15 @@
 ;; C-c d to toggle pdf-view-midnight-minor-mode
 (global-set-key (kbd "C-c d") 'pdf-view-midnight-minor-mode)
 
+;; C-c r to toggle repeat-mode
+(global-set-key (kbd "C-c r") 'repeat-mode)
+
 ;; M-p and M-n for backward-paragraph and forward-paragraph
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "M-n") 'forward-paragraph)
 
-;; M-" for mark-word (translating M-@ to swedish keyboard)
-(global-set-key (kbd "M-\"") 'mark-word)
+;; M-" for mark-word (translating M-@ to swedish keyboard, disabled)
+;;(global-set-key (kbd "M-\"") 'mark-word)
 
 ;; C-; for other-window (default: C-x o)
 (global-set-key (kbd "C-;") 'other-window)
@@ -197,7 +200,7 @@
 ;; C-<return> for vterm
 (global-set-key (kbd "C-<return>") 'vterm)
 
-;;;** Larger keybindings (custom functions)
+;;;** Custom functions
 
 ;; Move to window when splitting
 (defun split-window-below-and-move ()
@@ -246,23 +249,25 @@
   (kill-buffer (current-buffer)))
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
 
+;; M-: M-" to perform emacs actions with AI
+;; Interactive org-ai-prompt which returns emacs-lisp expressions (M-")
+(defun org-ai-elisp ()
+      (interactive)
+      "Prompts the user for an action within Emacs which is translated to elisp."
+      (let ((prompt-string "Perform an action: "))
+         (org-ai-prompt
+          (read-from-minibuffer prompt-string)
+          :sys-prompt "You are an expert at Emacs, and Emacs Lisp, which is used to script and extend Emacs. You can understand natural language requests for actions to take within Emacs, then translate them to Emacs Lisp that carries out those actions.
+
+  Reply only in pure lisp expressions that can then be evaluated with \"eval-expression\". Do not include any comments or explanations. If the answer consists of multiple expressions, wrap them inside a \"progn\" form.")))
+(global-set-key (kbd "M-\"") 'org-ai-elisp)
+
 ;;;* Macros
 
 ;; Open Inbox
 (fset 'inbox
    [?\C-c ?m ?\C-s ?i ?n ?b ?o ?x return ?\C-b ?\C-b ?\C-b ?\C-b ?\C-b return])
 (global-set-key (kbd "C-c i") 'inbox)
-;; alt Open Inbox (does not require 'C-c m' to open notmuch)
-;;(fset 'inbox2
-;;   "\C-[xnotmuch\C-m\C-[[B\C-[[B\C-[[B\C-[[B\C-[[C\C-[[C\C-[[C\C-[[C\C-[[C\C-[[C\C-[[C\C-[[C\C-[[C\C-[[C\C-[[C\C-[[C\C-[[C\C-m")
-;;(global-set-key (kbd "C-c i") 'inbox2)
-
-;; Search Mail (not working)
-;;(fset 'notmuchsearch
-;;   "\C-[xnotmuch-search")
-;;(define-key notmuch-search-mode-map (kbd "/") 'notmuchsearch)
-;;(define-key notmuch-show-mode-map (kbd "/") 'notmuchsearch)
-;;(define-key notmuch-hello-mode-map (kbd "/") 'notmuchsearch)
 
 ;;;* Outline mode in init.el
 (add-hook 'emacs-lisp-mode-hook 
@@ -273,3 +278,109 @@
             (outline-minor-mode 1)
             ))
 
+;;;* EXWM
+(require 'exwm)
+(require 'exwm-config)
+
+;; Set the initial number of workspaces (they can also be created later).
+(setq exwm-workspace-number 4)
+
+;; All buffers created in EXWM mode are named "*EXWM*". You may want to
+;; change it in `exwm-update-class-hook' and `exwm-update-title-hook', which
+;; are run when a new X window class name or title is available.  Here's
+;; some advice on this topic:
+;; + Always use `exwm-workspace-rename-buffer` to avoid naming conflict.
+;; + For applications with multiple windows (e.g. GIMP), the class names of
+;    all windows are probably the same.  Using window titles for them makes
+;;   more sense.
+;; In the following example, we use class names for all windows except for
+;; Java applications and GIMP.
+(add-hook 'exwm-update-class-hook
+          (lambda ()
+            (unless (or (string-prefix-p "sun-awt-X11-" exwm-instance-name)
+                        (string= "gimp" exwm-instance-name))
+              (exwm-workspace-rename-buffer exwm-class-name))))
+(add-hook 'exwm-update-title-hook
+          (lambda ()
+            (when (or (not exwm-instance-name)
+                      (string-prefix-p "sun-awt-X11-" exwm-instance-name)
+                      (string= "gimp" exwm-instance-name))
+              (exwm-workspace-rename-buffer exwm-title))))
+
+;; Global keybindings can be defined with `exwm-input-global-keys'.
+;; Here are a few examples:
+(setq exwm-input-global-keys
+      `(
+        ;; Bind "s-r" to exit char-mode and fullscreen mode.
+        ([?\s-r] . exwm-reset)
+        ;; Bind "s-w" to switch workspace interactively.
+        ([?\s-w] . exwm-workspace-switch)
+        ;; Bind "s-0" to "s-9" to switch to a workspace by its index.
+        ,@(mapcar (lambda (i)
+                    `(,(kbd (format "s-%d" i)) .
+                      (lambda ()
+                        (interactive)
+                        (exwm-workspace-switch-create ,i))))
+                  (number-sequence 0 9))
+        ;; Bind "s-&" to launch applications ('M-&' also works if the output
+        ;; buffer does not bother you).
+        ([?\s-&] . (lambda (command)
+		     (interactive (list (read-shell-command "$ ")))
+		     (start-process-shell-command command nil command)))
+        ;; Bind "s-<f2>" to "slock", a simple X display locker.
+        ([s-f2] . (lambda ()
+		    (interactive)
+		    (start-process "" nil "/usr/bin/slock")))))
+
+;; To add a key binding only available in line-mode, simply define it in
+;; `exwm-mode-map'.  The following example shortens 'C-c q' to 'C-q'.
+(define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
+(define-key exwm-mode-map (kbd "C-;") 'other-window)
+(define-key exwm-mode-map (kbd "C-<tab>") 'next-buffer)
+(define-key exwm-mode-map (kbd "C-<return>") 'vterm)
+(define-key exwm-mode-map (kbd "C-c C-f") 'exwm-layout-toggle-fullscreen)
+
+;; The following example demonstrates how to use simulation keys to mimic
+;; the behavior of Emacs.  The value of `exwm-input-simulation-keys` is a
+;; list of cons cells (SRC . DEST), where SRC is the key sequence you press
+;; and DEST is what EXWM actually sends to application.  Note that both SRC
+;; and DEST should be key sequences (vector or string).
+(setq exwm-input-simulation-keys
+      '(
+        ;; movement
+        ([?\C-b] . [left])
+        ([?\M-b] . [C-left])
+        ([?\C-f] . [right])
+        ([?\M-f] . [C-right])
+        ([?\C-p] . [up])
+        ([?\C-n] . [down])
+        ([?\C-a] . [home])
+        ([?\C-e] . [end])
+        ([?\M-v] . [prior])
+        ([?\C-v] . [next])
+        ([?\C-d] . [delete])
+        ([?\C-k] . [S-end delete])
+        ;; cut/paste.
+        ([?\C-w] . [?\C-x])
+        ([?\M-w] . [?\C-c])
+        ([?\C-y] . [?\C-v])
+        ;; search
+        ([?\C-s] . [?\C-f])))
+
+;; You can hide the minibuffer and echo area when they're not used, by
+;; uncommenting the following line.
+;(setq exwm-workspace-minibuffer-position 'bottom)
+
+;; Do not forget to enable EXWM. It will start by itself when things are
+;; ready.  You can put it _anywhere_ in your configuration.
+(exwm-enable)
+
+;; Open ediff control panel in a new window instead of a new frame
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+;; Convenient editing for X windows
+(require 'exwm-edit)
+
+;; Multiple screens with xrandr
+;;(require 'exwm-randr)
+;;(exwm-randr-enable)
