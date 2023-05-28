@@ -99,7 +99,8 @@
 (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
 (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
 
-(visual-line-mode)
+; wrap lines
+(global-visual-line-mode 1)
 
 ;; scroll line by line
 (setq scroll-step 1)
