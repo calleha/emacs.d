@@ -1,0 +1,2 @@
+;;; Generated package description from exwm-modeline.el  -*- no-byte-compile: t -*-
+(define-package "exwm-modeline" "20230331.1747" "A modeline segment for EXWM workspaces" '((emacs "27.1") (exwm "0.26")) :commit "852a88a58714e3e59675b79b185f036f7b0300e8" :authors '(("Korytov Pavel" . "thexcloud@gmail.com")) :maintainers '(("Korytov Pavel" . "thexcloud@gmail.com")) :maintainer '("Korytov Pavel" . "thexcloud@gmail.com") :url "https://github.com/SqrtMinusOne/exwm-modeline")

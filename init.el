@@ -50,16 +50,6 @@
 ;; C-c m opens up notmuch from any buffer
 (global-set-key (kbd "C-c m") `notmuch)
 
-;;;** company
-;(add-hook 'after-init-hook 'global-company-mode)
-;; rebind M-n and M-p to C-n and C-p for company
-;(define-key company-active-map (kbd "\C-n") 'company-select-next)
-;(define-key company-active-map (kbd "\C-p") 'company-select-previous)
-
-;;;** slime
-;(setq inferior-lisp-program "/usr/bin/sbcl")
-;(slime-setup '(slime-fancy slime-company))
-
 ;;;** multiple-cursors
 (autoload 'multiple-cursors "multiple-cursors" "edit with multiple cursors" t)
 
@@ -87,6 +77,18 @@
 ;;;** mini-modeline
 (global-set-key (kbd "C-c h") 'mini-modeline-mode)
 
+;;;** vertico
+(vertico-mode 1)
+(setq vertico-cycle t)
+
+;;;** corfu
+(global-corfu-mode 1)
+(setq corfu-cycle t)
+
+;;;** avy
+(global-set-key (kbd "C-;") 'avy-goto-char)
+(global-set-key (kbd "C-:") 'avy-goto-word-1)
+
 ;;;* Settings
 ;;;** Functionality settings
 
@@ -98,9 +100,13 @@
 (add-hook 'notmuch-hello-mode-hook (lambda () (display-line-numbers-mode -1)))
 (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
 (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
+(add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 ; wrap lines
 (global-visual-line-mode 1)
+
+; repeat mode
+(repeat-mode 1)
 
 ;; scroll line by line
 (setq scroll-step 1)
@@ -130,7 +136,6 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(tooltip-mode -1)
 
 ;; remove fringes
 ;;(fringe-mode '(0 . 0))
@@ -149,6 +154,7 @@
 
 ;; modeline
 (column-number-mode 1)
+(exwm-modeline-mode 1)
 
 ;; font
 ;(add-to-list 'default-frame-alist
@@ -192,14 +198,20 @@
 ;; M-" for mark-word (translating M-@ to swedish keyboard, disabled)
 ;;(global-set-key (kbd "M-\"") 'mark-word)
 
-;; C-; for other-window (default: C-x o)
-(global-set-key (kbd "C-;") 'other-window)
+;; C-; for other-window (disabled, default: C-x o)
+;;(global-set-key (kbd "C-;") 'other-window)
 
-;; C-<tab> for next-buffer (default: C-x <left>)
+;; C-<tab> for next-buffer (default: C-x <right>)
 (global-set-key (kbd "C-<tab>") 'next-buffer)
+
+;; M-<tab> for previous-buffer (default: C-x <left>)
+(global-set-key (kbd "M-<tab>") 'previous-buffer)
 
 ;; C-<return> for vterm
 (global-set-key (kbd "C-<return>") 'vterm)
+
+;; M-<return> for eshell
+(global-set-key (kbd "M-<return>") 'eshell)
 
 ;;;** Custom functions
 
@@ -338,7 +350,9 @@
 (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
 (define-key exwm-mode-map (kbd "C-;") 'other-window)
 (define-key exwm-mode-map (kbd "C-<tab>") 'next-buffer)
+(define-key exwm-mode-map (kbd "M-<tab>") 'previous-buffer)
 (define-key exwm-mode-map (kbd "C-<return>") 'vterm)
+(define-key exwm-mode-map (kbd "M-<return>") 'eshell)
 (define-key exwm-mode-map (kbd "C-c C-f") 'exwm-layout-toggle-fullscreen)
 
 ;; The following example demonstrates how to use simulation keys to mimic
