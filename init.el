@@ -375,6 +375,8 @@
         ([?\C-v] . [next])
         ([?\C-d] . [delete])
         ([?\C-k] . [S-end delete])
+	([?\C-g] . [escape])
+	([?\C-j] . [return])
         ;; cut/paste.
         ([?\C-w] . [?\C-x])
         ([?\M-w] . [?\C-c])
