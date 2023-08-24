@@ -1,5 +1,3 @@
-+ elpa/
-+ elpa/**
 + custom-set-variables.el
 + init.el
 + Spacemacs-ish-theme.el

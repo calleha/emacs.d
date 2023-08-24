@@ -1,100 +1,91 @@
-;; Emacs config
-;;;* Extensions
-;;;** package
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
+;;;* Loading packages
+;;;** package.el + melpa
 (package-initialize)
-
-;;;** melpa
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/") t)
-
-;;;** org-mode
-
-;; The following lines are always needed.  Choose your own keys.
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-cb" 'org-switchb)
-
-;; org-ref
-(autoload 'org-ref "org-ref" "org-ref" t)
-(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
-
-;;;** org-ai
-(add-hook 'org-mode-hook #'org-ai-mode)
-(org-ai-global-mode)
-(global-set-key (kbd "C-c p") 'org-ai-prompt)
-(global-set-key (kbd "C-c e") 'org-ai-explain-code)
-
+;;;** org-ref
+(use-package org-ref
+  :init
+  (autoload 'org-ref "org-ref" "org-ref" t)
+  (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f")))
 ;;;** org-modern
-(add-hook 'org-mode-hook #'org-modern-mode)
-(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
-
-;;;** enable xclip
-(add-to-list 'load-path "~/.emacs.d/elpa/xclip-1.4/")
-(require 'xclip)
-(xclip-mode 1)
-
-;;;** mail
-(setq send-mail-function    'smtpmail-send-it
-      smtpmail-smtp-server  "smtp.gmail.com"
-      smtpmail-stream-type  'ssl
-      smtpmail-smtp-service 465)
-
-;;;** notmuch
-(autoload 'notmuch "notmuch" "notmuch mail" t)
-;; C-c m opens up notmuch from any buffer
-(global-set-key (kbd "C-c m") `notmuch)
-
+(use-package org-modern
+  :config
+  (add-hook 'org-mode-hook #'org-modern-mode)
+  (add-hook 'org-agenda-finalize-hook #'org-modern-agenda))
+;;;** org-ai
+;(use-package org-ai
+;  :config
+;  (add-hook 'org-mode-hook #'org-ai-mode)
+;  (org-ai-global-mode))
+;;;** org-present
+(use-package org-present
+  :init
+  (use-package visual-fill-column)
+  :config
+  (setq visual-fill-column-width 110
+        visual-fill-column-center-text t)
+  (add-hook 'org-present-mode-hook (lambda ()
+  				     (visual-fill-column-mode 1)
+  				     (display-line-numbers-mode -1)
+  				     (visual-line-mode 1)))
+  (add-hook 'org-present-mode-quit-hook (lambda ()
+  				     (visual-fill-column-mode -1)
+  				     (display-line-numbers-mode 1)
+  				     (visual-line-mode -1))))
+;;;** xclip
+(use-package xclip
+  :config
+  (xclip-mode 1))
 ;;;** multiple-cursors
-(autoload 'multiple-cursors "multiple-cursors" "edit with multiple cursors" t)
-
-;; keybindings
-(global-set-key (kbd "C-. C-.") 'mc/edit-lines)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-. C-<") 'mc/mark-all-like-this)
-
-;; mc-extras
-;; haven't added keybindings yet
-
-;;;** dmenu
-(global-set-key (kbd "C-s-d") 'dmenu)
-;;;** pdf-tools
-(pdf-tools-install)
-;;;** pdf-view
-(require 'pdf-view)
-(setq pdf-view-midnight-colors `(,(face-attribute 'default :foreground) .
-                                 ,(face-attribute 'default :background)))
+(use-package multiple-cursors
+  ;:init
+  ;(autoload 'multiple-cursors "multiple-cursors" "edit with multiple cursors" t)
+  :config
+  (use-package mc-extras))
 ;;;** which-key
-(which-key-mode 1)
-;;;** zygospore (reversible C-x 1)
-(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
-;;;** mini-modeline
-(global-set-key (kbd "C-c h") 'mini-modeline-mode)
-
+(use-package which-key
+  :config
+  (which-key-mode 1))
 ;;;** vertico
-(vertico-mode 1)
-(setq vertico-cycle t)
-
+(use-package vertico
+  :config
+  (vertico-mode 1))
 ;;;** corfu
-(global-corfu-mode 1)
-(setq corfu-cycle t)
-
-;;;** avy
-(global-set-key (kbd "C-;") 'avy-goto-char)
-(global-set-key (kbd "C-:") 'avy-goto-word-1)
+(use-package corfu
+  :config
+  (global-corfu-mode 1))
+;;;** pdf-view
+(use-package pdf-view
+  :config
+  (pdf-tools-install)
+  (setq pdf-view-midnight-colors `(,(face-attribute 'default :foreground) .
+                                   ,(face-attribute 'default :background)))
+  (add-hook 'pdf-view-mode-hook 'auto-revert-mode))
+;;;** notmuch
+;(use-package notmuch
+;  :init
+;  (autoload 'notmuch "notmuch" "notmuch mail" t))
+;;;** all the packages I forgot to add before
+(use-package vterm)
+(use-package sudo-edit)
+(use-package avy)
+(use-package god-mode)
+(use-package mini-modeline)
+(use-package zygospore)
+;;;** emms
+(use-package emms
+  :init
+  (emms-all)
+  (setq emms-player-list '(emms-player-mpv)
+        emms-info-functions '(emms-info-native)))
 
 ;;;* Settings
 ;;;** Functionality settings
 
 ; display lines
 (global-display-line-numbers-mode)
-
+;; exceptions
 (add-hook 'notmuch-search-mode-hook (lambda () (display-line-numbers-mode -1)))
 (add-hook 'notmuch-show-mode-hook (lambda () (display-line-numbers-mode -1)))
 (add-hook 'notmuch-hello-mode-hook (lambda () (display-line-numbers-mode -1)))
@@ -108,13 +99,10 @@
 ; repeat mode
 (repeat-mode 1)
 
-;; scroll line by line
+; scroll line by line
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
 (setq auto-window-vscroll nil)
-
-; auto-revert-mode (auto refresh)
-(add-hook 'pdf-view-mode-hook 'auto-revert-mode)
 
 ; display time and battery
 (setq display-time-24hr-format t)
@@ -129,6 +117,12 @@
 
 ; enable recursive minibuffers
 (setq enable-recursive-minibuffers 1)
+
+;;;*** mail
+(setq send-mail-function    'smtpmail-send-it
+      smtpmail-smtp-server  "smtp.gmail.com"
+      smtpmail-stream-type  'ssl
+      smtpmail-smtp-service 465)
 
 ;;;** Aesthetics
 
@@ -154,7 +148,6 @@
 
 ;; modeline
 (column-number-mode 1)
-(exwm-modeline-mode 1)
 
 ;; font
 ;(add-to-list 'default-frame-alist
@@ -164,20 +157,95 @@
 (setq custom-file "~/.emacs.d/custom-set-variables.el")
 (load custom-file)
 
-;;;* Bindings
-;;;** Currently disabled
+;;;* Custom functions
 
-;; M-f for forward-to-word instead of forward-word (misc.el)
-;;(require 'misc)
-;;(global-set-key (kbd "M-f") 'forward-to-word)
+;; move to window when splitting
+(defun split-window-below-and-move ()
+  (interactive)
+  (split-window-below)
+  (other-window 1))
+(defun split-window-right-and-move ()
+  (interactive)
+  (split-window-right)
+  (other-window 1))
 
-;;;** Custom keybindings
+;; kill-whole-word
+(defun kill-whole-word ()
+  (interactive)
+  (forward-word)
+  (backward-kill-word 1))
+
+;; kill-whole-line
+(defun kill-whole-line ()
+  (interactive)
+  (move-beginning-of-line 1)
+  (kill-line 1))
+
+;; C-w for backward-kill-word, unless there is a region selected
+(defadvice kill-region (before unix-werase activate compile)
+      "When called interactively with no active region, delete a single word
+    backwards instead."
+      (interactive
+       (if mark-active (list (region-beginning) (region-end))
+         (list (save-excursion (backward-word 1) (point)) (point)))))
+
+;; copy line, or copy region if there is a region selected
+(defun kill-ring-save-line-or-region (beg end)
+  (interactive (if (use-region-p)
+                   (list (region-beginning) (region-end))
+                 (list (line-beginning-position) (line-beginning-position 2))))
+  (kill-ring-save beg end))
+
+;; kill all buffers
+(defun kill-all-buffers ()
+  (interactive)
+  (mapc 'kill-buffer (buffer-list)))
+
+;; kill the current buffer
+(defun kill-current-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
+
+;; M-: M-" to perform emacs actions with AI
+;; interactive org-ai-prompt which returns emacs-lisp expressions
+(defun org-ai-elisp ()
+  (interactive)
+  "Prompts the user for an action within Emacs which is translated to elisp."
+  (let ((prompt-string "Perform an action: "))
+    (org-ai-prompt
+     (read-from-minibuffer prompt-string)
+     :sys-prompt "You are an expert at Emacs, and Emacs Lisp, which is used to script and extend Emacs. You can understand natural language requests for actions to take within Emacs, then translate them to Emacs Lisp that carries out those actions.
+
+  Reply only in pure lisp expressions that can then be evaluated with \"eval-expression\". Do not include any comments or explanations. If the answer consists of multiple expressions, wrap them inside a \"progn\" form.")))
+
+;;;* Custom keybindings
+
+(global-set-key (kbd "C-x C-0") 'delete-window)
+(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
+(global-set-key (kbd "C-x C-1") 'zygospore-toggle-delete-other-windows)
+
+;; calling custom functions
+(global-set-key (kbd "C-x C-2") 'split-window-below-and-move)
+(global-set-key (kbd "C-x C-3") 'split-window-right-and-move)
+(global-set-key (kbd "C-c w") 'kill-whole-word)
+(global-set-key (kbd "C-c C-w") 'kill-whole-word)
+(global-set-key (kbd "C-c C-l") 'kill-whole-line)
+(global-set-key (kbd "M-w") 'kill-ring-save-line-or-region)
+(global-set-key (kbd "C-s-x C-s-k") 'kill-all-buffers)
+(global-set-key (kbd "C-x k") 'kill-current-buffer)
+(global-set-key (kbd "M-\"") 'org-ai-elisp)
+
+;; (org-mode) The following lines are always needed.  Choose your own keys.
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-switchb)
 
 ;; C-c q to toggle visual-line-mode
 (global-set-key (kbd "C-c q") 'visual-line-mode)
 
 ;; C-c e to toggle electric-pair-mode (disabled, binding used by org-ai)
-;;(global-set-key (kbd "C-c e") 'electric-pair-mode)
+(global-set-key (kbd "C-c e") 'electric-pair-mode)
 
 ;; C-c n to toggle display-line-numbers-mode
 (global-set-key (kbd "C-c n") 'display-line-numbers-mode)
@@ -195,17 +263,11 @@
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "M-n") 'forward-paragraph)
 
-;; M-" for mark-word (translating M-@ to swedish keyboard, disabled)
-;;(global-set-key (kbd "M-\"") 'mark-word)
-
-;; C-; for other-window (disabled, default: C-x o)
-;;(global-set-key (kbd "C-;") 'other-window)
-
 ;; C-<tab> for next-buffer (default: C-x <right>)
 (global-set-key (kbd "C-<tab>") 'next-buffer)
 
-;; M-<tab> for previous-buffer (default: C-x <left>)
-(global-set-key (kbd "M-<tab>") 'previous-buffer)
+;; s-<tab> for previous-buffer (default: C-x <left>)
+(global-set-key (kbd "s-<tab>") 'previous-buffer)
 
 ;; C-<return> for vterm
 (global-set-key (kbd "C-<return>") 'vterm)
@@ -213,74 +275,38 @@
 ;; M-<return> for eshell
 (global-set-key (kbd "M-<return>") 'eshell)
 
-;;;** Custom functions
+;; C-s-d for dmenu
+(global-set-key (kbd "C-s-d") 'dmenu)
 
-;; Move to window when splitting
-(defun split-window-below-and-move ()
-  (interactive)
-  (split-window-below)
-  (other-window 1))
-(defun split-window-right-and-move ()
-  (interactive)
-  (split-window-right)
-  (other-window 1))
-(global-set-key (kbd "C-x 2") 'split-window-below-and-move)
-(global-set-key (kbd "C-x 3") 'split-window-right-and-move)
+;; keybindings for multiple-cursors
+(global-set-key (kbd "C-. C-.") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-. C-<") 'mc/mark-all-like-this)
 
-;; kill-whole-word with C-c w
-(defun kill-whole-word ()
-  (interactive)
-  (forward-word)
-  (backward-kill-word 1))
-(global-set-key (kbd "C-c w") 'kill-whole-word)
+;; org-ai keybindings
+;(global-set-key (kbd "C-c p") 'org-ai-prompt)
+;(global-set-key (kbd "C-c e") 'org-ai-explain-code)
 
-;; C-w for backward-kill-word, unless there is a region selected
-(defadvice kill-region (before unix-werase activate compile)
-      "When called interactively with no active region, delete a single word
-    backwards instead."
-      (interactive
-       (if mark-active (list (region-beginning) (region-end))
-         (list (save-excursion (backward-word 1) (point)) (point)))))
+;; toggle mini-modeline
+(global-set-key (kbd "C-c h") 'mini-modeline-mode)
 
-;; M-w to copy line, unless there is a region selected
-(defun kill-ring-save-line-or-region (beg end)
-  (interactive (if (use-region-p)
-                   (list (region-beginning) (region-end))
-                 (list (line-beginning-position) (line-beginning-position 2))))
-  (kill-ring-save beg end))
-(global-set-key (kbd "M-w") 'kill-ring-save-line-or-region)
+;; avy
+(global-set-key (kbd "C-;") 'avy-goto-char)
+(global-set-key (kbd "C-:") 'avy-goto-word-1)
 
-;; C-s-x C-s-k to kill all buffers
-(defun kill-all-buffers ()
-  (interactive)
-  (mapc 'kill-buffer (buffer-list)))
-(global-set-key (kbd "C-s-x C-s-k") 'kill-all-buffers)
+;; C-c m opens up notmuch from any buffer
+;(global-set-key (kbd "C-c m") `notmuch)
 
-;; C-x k to kill the current buffer
-(defun kill-current-buffer ()
-  (interactive)
-  (kill-buffer (current-buffer)))
-(global-set-key (kbd "C-x k") 'kill-current-buffer)
-
-;; M-: M-" to perform emacs actions with AI
-;; Interactive org-ai-prompt which returns emacs-lisp expressions (M-")
-(defun org-ai-elisp ()
-      (interactive)
-      "Prompts the user for an action within Emacs which is translated to elisp."
-      (let ((prompt-string "Perform an action: "))
-         (org-ai-prompt
-          (read-from-minibuffer prompt-string)
-          :sys-prompt "You are an expert at Emacs, and Emacs Lisp, which is used to script and extend Emacs. You can understand natural language requests for actions to take within Emacs, then translate them to Emacs Lisp that carries out those actions.
-
-  Reply only in pure lisp expressions that can then be evaluated with \"eval-expression\". Do not include any comments or explanations. If the answer consists of multiple expressions, wrap them inside a \"progn\" form.")))
-(global-set-key (kbd "M-\"") 'org-ai-elisp)
+;; god-mode keybindings
+(global-set-key (kbd "<escape>") #'god-local-mode)
 
 ;;;* Macros
 
 ;; Open Inbox
-(fset 'inbox
-   [?\C-c ?m ?\C-s ?i ?n ?b ?o ?x return ?\C-b ?\C-b ?\C-b ?\C-b ?\C-b return])
-(global-set-key (kbd "C-c i") 'inbox)
+;(fset 'inbox
+;   [?\C-c ?m ?\C-s ?i ?n ?b ?o ?x return ?\C-b ?\C-b ?\C-b ?\C-b ?\C-b return])
+;(global-set-key (kbd "C-c i") 'inbox)
 
 ;;;* Outline mode in init.el
 (add-hook 'emacs-lisp-mode-hook 
@@ -292,6 +318,8 @@
             ))
 
 ;;;* EXWM
+(use-package exwm
+:config
 (require 'exwm)
 (require 'exwm-config)
 
@@ -350,7 +378,7 @@
 (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
 (define-key exwm-mode-map (kbd "C-;") 'other-window)
 (define-key exwm-mode-map (kbd "C-<tab>") 'next-buffer)
-(define-key exwm-mode-map (kbd "M-<tab>") 'previous-buffer)
+(define-key exwm-mode-map (kbd "s-<tab>") 'previous-buffer)
 (define-key exwm-mode-map (kbd "C-<return>") 'vterm)
 (define-key exwm-mode-map (kbd "M-<return>") 'eshell)
 (define-key exwm-mode-map (kbd "C-c C-f") 'exwm-layout-toggle-fullscreen)
@@ -395,9 +423,17 @@
 ;; Open ediff control panel in a new window instead of a new frame
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
-;; Convenient editing for X windows
-(require 'exwm-edit)
-
 ;; Multiple screens with xrandr
-;;(require 'exwm-randr)
-;;(exwm-randr-enable)
+(require 'exwm-randr)
+(exwm-randr-enable)
+
+;; Convenient editing for X windows
+(use-package exwm-edit
+  :init
+  (require 'exwm-edit))
+
+;; exwm-modeline
+(use-package exwm-modeline
+  :config
+  (exwm-modeline-mode 1))
+)
