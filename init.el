@@ -3,6 +3,8 @@
 (package-initialize)
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/") t)
+;;;** use-package
+(setq use-package-always-ensure t)
 ;;;** org-ref
 (use-package org-ref
   :init
