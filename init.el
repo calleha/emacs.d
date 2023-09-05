@@ -3,27 +3,22 @@
 (package-initialize)
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/") t)
-;;;** use-package
-(setq use-package-always-ensure t)
-;;;** org-ref
+;;;** org extensions
 (use-package org-ref
   :init
   (autoload 'org-ref "org-ref" "org-ref" t)
   (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f")))
-;;;** org-modern
-(use-package org-modern
+(use-package org-modern :ensure t
   :config
   (add-hook 'org-mode-hook #'org-modern-mode)
   (add-hook 'org-agenda-finalize-hook #'org-modern-agenda))
-;;;** org-ai
 ;(use-package org-ai
 ;  :config
 ;  (add-hook 'org-mode-hook #'org-ai-mode)
 ;  (org-ai-global-mode))
-;;;** org-present
-(use-package org-present
+(use-package org-present :ensure t
   :init
-  (use-package visual-fill-column)
+  (use-package visual-fill-column :ensure t)
   :config
   (setq visual-fill-column-width 110
         visual-fill-column-center-text t)
@@ -39,22 +34,15 @@
 (use-package xclip
   :config
   (xclip-mode 1))
-;;;** multiple-cursors
-(use-package multiple-cursors
-  ;:init
-  ;(autoload 'multiple-cursors "multiple-cursors" "edit with multiple cursors" t)
-  :config
-  (use-package mc-extras))
-;;;** which-key
-(use-package which-key
+;;;** multiple-cursors, which-key, vertico, corfu
+(use-package multiple-cursors :ensure t)
+(use-package which-key :ensure t
   :config
   (which-key-mode 1))
-;;;** vertico
-(use-package vertico
+(use-package vertico :ensure t
   :config
   (vertico-mode 1))
-;;;** corfu
-(use-package corfu
+(use-package corfu :ensure t
   :config
   (global-corfu-mode 1))
 ;;;** pdf-view
@@ -69,14 +57,14 @@
 ;  :init
 ;  (autoload 'notmuch "notmuch" "notmuch mail" t))
 ;;;** all the packages I forgot to add before
-(use-package vterm)
-(use-package sudo-edit)
-(use-package avy)
+(use-package vterm :ensure t)
+(use-package sudo-edit :ensure t)
+(use-package avy :ensure t)
 (use-package god-mode)
-(use-package mini-modeline)
-(use-package zygospore)
+(use-package mini-modeline :ensure t)
+(use-package zygospore :ensure t)
 ;;;** emms
-(use-package emms
+(use-package emms :ensure t
   :init
   (emms-all)
   (setq emms-player-list '(emms-player-mpv)
@@ -235,7 +223,7 @@
 (global-set-key (kbd "M-w") 'kill-ring-save-line-or-region)
 (global-set-key (kbd "C-s-x C-s-k") 'kill-all-buffers)
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
-(global-set-key (kbd "M-\"") 'org-ai-elisp)
+;(global-set-key (kbd "M-\"") 'org-ai-elisp)
 
 ;; (org-mode) The following lines are always needed.  Choose your own keys.
 (global-set-key "\C-cl" 'org-store-link)
@@ -303,6 +291,12 @@
 ;; god-mode keybindings
 (global-set-key (kbd "<escape>") #'god-local-mode)
 
+;; emms
+(global-set-key (kbd "C-c <right>") 'emms-next)
+(global-set-key (kbd "C-c <left>") 'emms-previous)
+(global-set-key (kbd "C-c <down>") 'emms-pause)
+(global-set-key (kbd "C-c <up>") 'emms-play-directory)
+
 ;;;* Macros
 
 ;; Open Inbox
@@ -320,7 +314,7 @@
             ))
 
 ;;;* EXWM
-(use-package exwm
+(use-package exwm :ensure t
 :config
 (require 'exwm)
 (require 'exwm-config)
@@ -430,12 +424,12 @@
 (exwm-randr-enable)
 
 ;; Convenient editing for X windows
-(use-package exwm-edit
+(use-package exwm-edit :ensure t
   :init
   (require 'exwm-edit))
 
 ;; exwm-modeline
-(use-package exwm-modeline
+(use-package exwm-modeline :ensure t
   :config
   (exwm-modeline-mode 1))
 )
