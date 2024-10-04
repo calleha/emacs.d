@@ -4,7 +4,7 @@
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/") t)
 ;;;** org extensions
-(use-package org-ref
+(use-package org-ref :ensure t
   :init
   (autoload 'org-ref "org-ref" "org-ref" t)
   (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f")))
@@ -12,6 +12,7 @@
   :config
   (add-hook 'org-mode-hook #'org-modern-mode)
   (add-hook 'org-agenda-finalize-hook #'org-modern-agenda))
+; ai assistance disabled - requires openai token
 ;(use-package org-ai
 ;  :config
 ;  (add-hook 'org-mode-hook #'org-ai-mode)
@@ -30,10 +31,6 @@
   				     (visual-fill-column-mode -1)
   				     (display-line-numbers-mode 1)
   				     (visual-line-mode -1))))
-;;;** xclip
-(use-package xclip
-  :config
-  (xclip-mode 1))
 ;;;** multiple-cursors, which-key, vertico, corfu
 (use-package multiple-cursors :ensure t)
 (use-package which-key :ensure t
@@ -46,7 +43,7 @@
   :config
   (global-corfu-mode 1))
 ;;;** pdf-view
-(use-package pdf-view
+(use-package pdf-view :ensure t
   :config
   (pdf-tools-install)
   (setq pdf-view-midnight-colors `(,(face-attribute 'default :foreground) .
@@ -60,7 +57,7 @@
 (use-package vterm :ensure t)
 (use-package sudo-edit :ensure t)
 (use-package avy :ensure t)
-(use-package god-mode)
+(use-package god-mode :ensure t)
 (use-package mini-modeline :ensure t)
 (use-package zygospore :ensure t)
 ;;;** emms
@@ -124,10 +121,10 @@
 ;; remove fringes
 ;;(fringe-mode '(0 . 0))
 
-;; colors
-(set-background-color "#292b2e")
-(set-foreground-color "#b2b2b2")
-(set-cursor-color "#e3dedd")
+;; colors (redundant; handled by themes)
+;;(set-background-color "#292b2e")
+;;(set-foreground-color "#b2b2b2")
+;;(set-cursor-color "#e3dedd")
 
 ;; transparency
 ;;(set-frame-parameter (selected-frame) 'alpha 95)
@@ -231,10 +228,13 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 
+;; C-c m to compile
+(global-set-key (kbd "C-c m") 'compile)
+
 ;; C-c q to toggle visual-line-mode
 (global-set-key (kbd "C-c q") 'visual-line-mode)
 
-;; C-c e to toggle electric-pair-mode (disabled, binding used by org-ai)
+;; C-c e to toggle electric-pair-mode (normally disabled, binding used by org-ai)
 (global-set-key (kbd "C-c e") 'electric-pair-mode)
 
 ;; C-c n to toggle display-line-numbers-mode
@@ -274,7 +274,7 @@
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-. C-<") 'mc/mark-all-like-this)
 
-;; org-ai keybindings
+;; org-ai keybindings (disabled, C-c e used by electric-pair-mode)
 ;(global-set-key (kbd "C-c p") 'org-ai-prompt)
 ;(global-set-key (kbd "C-c e") 'org-ai-explain-code)
 
@@ -285,8 +285,8 @@
 (global-set-key (kbd "C-;") 'avy-goto-char)
 (global-set-key (kbd "C-:") 'avy-goto-word-1)
 
-;; C-c m opens up notmuch from any buffer
-;(global-set-key (kbd "C-c m") `notmuch)
+;; s-M opens up notmuch from any buffer
+;(global-set-key (kbd "s-M") `notmuch)
 
 ;; god-mode keybindings
 (global-set-key (kbd "<escape>") #'god-local-mode)
