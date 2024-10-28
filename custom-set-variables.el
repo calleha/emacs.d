@@ -28,7 +28,7 @@
  '(org-export-backends '(ascii beamer html icalendar latex odt))
  '(org-export-with-toc nil)
  '(package-selected-packages
-   '(vertico emms visual-fill-column org-present god-mode avy corfu org-modern org-ai mini-modeline exwm-modeline zygospore sudo-edit vterm org-ref pdf-tools dmenu yasnippet exwm-edit exwm gnuplot gnuplot-mode multiple-cursors which-key ##)))
+   '(exwm-modeline exwm gnu-elpa-keyring-update magit iedit gptel vertico emms visual-fill-column org-present god-mode avy corfu org-modern org-ai mini-modeline zygospore sudo-edit vterm org-ref pdf-tools dmenu yasnippet exwm-edit gnuplot gnuplot-mode multiple-cursors which-key ##)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

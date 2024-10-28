@@ -12,8 +12,9 @@
   :config
   (add-hook 'org-mode-hook #'org-modern-mode)
   (add-hook 'org-agenda-finalize-hook #'org-modern-agenda))
-; ai assistance disabled - requires openai token
-;(use-package org-ai
+; ai assistance disabled - requires openai token or local llm. gptel or org-ai
+;(use-package gptel :ensure t)
+;(use-package org-ai :ensure t
 ;  :config
 ;  (add-hook 'org-mode-hook #'org-ai-mode)
 ;  (org-ai-global-mode))
@@ -43,7 +44,7 @@
   :config
   (global-corfu-mode 1))
 ;;;** pdf-view
-(use-package pdf-view :ensure t
+(use-package pdf-tools :ensure t
   :config
   (pdf-tools-install)
   (setq pdf-view-midnight-colors `(,(face-attribute 'default :foreground) .
@@ -60,6 +61,10 @@
 (use-package god-mode :ensure t)
 (use-package mini-modeline :ensure t)
 (use-package zygospore :ensure t)
+(use-package magit :ensure t)
+(use-package iedit :ensure t)
+(use-package gnuplot :ensure t)
+(use-package dmenu :ensure t)
 ;;;** emms
 (use-package emms :ensure t
   :init
@@ -282,8 +287,8 @@
 (global-set-key (kbd "C-c h") 'mini-modeline-mode)
 
 ;; avy
-(global-set-key (kbd "C-;") 'avy-goto-char)
-(global-set-key (kbd "C-:") 'avy-goto-word-1)
+(global-set-key (kbd "C-:") 'avy-goto-char)
+(global-set-key (kbd "C-c C-;") 'avy-goto-word-1)
 
 ;; s-M opens up notmuch from any buffer
 ;(global-set-key (kbd "s-M") `notmuch)
@@ -317,7 +322,7 @@
 (use-package exwm :ensure t
 :config
 (require 'exwm)
-(require 'exwm-config)
+;obsolete (require 'exwm-config)
 
 ;; Set the initial number of workspaces (they can also be created later).
 (setq exwm-workspace-number 4)
@@ -420,8 +425,9 @@
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; Multiple screens with xrandr
-(require 'exwm-randr)
-(exwm-randr-enable)
+;obsolete? (require 'exwm-randr)
+;obsolete (exwm-randr-enable)
+(exwm-randr-mode 1)
 
 ;; Convenient editing for X windows
 (use-package exwm-edit :ensure t
