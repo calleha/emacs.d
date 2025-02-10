@@ -12,8 +12,15 @@
   :config
   (add-hook 'org-mode-hook #'org-modern-mode)
   (add-hook 'org-agenda-finalize-hook #'org-modern-agenda))
-; ai assistance disabled - requires openai token or local llm. gptel or org-ai
-;(use-package gptel :ensure t)
+; ai assistance - requires ollama with local llm
+(use-package gptel :ensure t
+  :config
+  (setq gptel-default-mode 'org-mode)
+  (setq gptel-backend (gptel-make-ollama
+   "Ollama"
+   :host "localhost:11434"
+   :models '("deepseek-r1" "qwen2.5-coder:7b-instruct" "gemma2:latest" "gemma2:2b")
+   :stream t)))
 ;(use-package org-ai :ensure t
 ;  :config
 ;  (add-hook 'org-mode-hook #'org-ai-mode)
@@ -77,6 +84,8 @@
 
 ; display lines
 (global-display-line-numbers-mode)
+;; relative visual line numbers
+(setq display-line-numbers-type 'visual)
 ;; exceptions
 (add-hook 'notmuch-search-mode-hook (lambda () (display-line-numbers-mode -1)))
 (add-hook 'notmuch-show-mode-hook (lambda () (display-line-numbers-mode -1)))
@@ -100,6 +109,9 @@
 (setq display-time-24hr-format t)
 (display-time-mode 1)
 (display-battery-mode 1)
+
+; disable startup screen
+(setq inhibit-startup-screen t)
 
 ; disable ~files
 (setq make-backup-files nil)
@@ -212,9 +224,15 @@
 
 ;;;* Custom keybindings
 
+;; general
 (global-set-key (kbd "C-x C-0") 'delete-window)
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
 (global-set-key (kbd "C-x C-1") 'zygospore-toggle-delete-other-windows)
+(global-set-key (kbd "M-p") 'backward-paragraph)
+(global-set-key (kbd "M-n") 'forward-paragraph)
+(global-set-key (kbd "C-<tab>") 'next-buffer)
+(global-set-key (kbd "s-<tab>") 'previous-buffer)
+(global-set-key (kbd "C-,") 'duplicate-line)
 
 ;; calling custom functions
 (global-set-key (kbd "C-x C-2") 'split-window-below-and-move)
@@ -233,6 +251,7 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 
+;; modes and command shortcuts
 ;; C-c m to compile
 (global-set-key (kbd "C-c m") 'compile)
 
@@ -253,16 +272,6 @@
 
 ;; C-c r to toggle repeat-mode
 (global-set-key (kbd "C-c r") 'repeat-mode)
-
-;; M-p and M-n for backward-paragraph and forward-paragraph
-(global-set-key (kbd "M-p") 'backward-paragraph)
-(global-set-key (kbd "M-n") 'forward-paragraph)
-
-;; C-<tab> for next-buffer (default: C-x <right>)
-(global-set-key (kbd "C-<tab>") 'next-buffer)
-
-;; s-<tab> for previous-buffer (default: C-x <left>)
-(global-set-key (kbd "s-<tab>") 'previous-buffer)
 
 ;; C-<return> for vterm
 (global-set-key (kbd "C-<return>") 'vterm)
@@ -322,10 +331,9 @@
 (use-package exwm :ensure t
 :config
 (require 'exwm)
-;obsolete (require 'exwm-config)
 
 ;; Set the initial number of workspaces (they can also be created later).
-(setq exwm-workspace-number 4)
+(setq exwm-workspace-number 5)
 
 ;; All buffers created in EXWM mode are named "*EXWM*". You may want to
 ;; change it in `exwm-update-class-hook' and `exwm-update-title-hook', which
@@ -372,7 +380,44 @@
         ;; Bind "s-<f2>" to "slock", a simple X display locker.
         ([s-f2] . (lambda ()
 		    (interactive)
-		    (start-process "" nil "/usr/bin/slock")))))
+		    (start-process "" nil "/usr/bin/slock")))
+	;; Bind "s-x" to dmenu_run
+	([?\s-x] . (lambda ()
+		     (interactive)
+		     (start-process "" nil "/usr/bin/dmenu_run" "-b")))
+	;; Bind "s-<escape>" to power menu
+	([s-escape] . (lambda ()
+		     (interactive)
+		     (start-process-shell-command "" nil "~/.local/bin/power.sh")))
+	;; Bind "s-<space>" to keyboard switcher
+	;;([s-space] . (lambda ()
+	;;	     (interactive)
+	;;	     (start-process-shell-command "" nil "~/.local/bin/setkeyboardlayout.sh")))
+	;;([?\s-s] . (lambda ()
+	;;	     (interactive)
+	;;	     (start-process-shell-command "" nil "import -window root Pictures/screenshots/screenshot_$(date '+%Y-%m-%d_%H:%M')_$(echo $RANDOM).png")))
+	;;([?\s-M-s] . (lambda ()
+	;;	     (interactive)
+	;;	     (start-process-shell-command "" nil "import Pictures/screenshots/screenshot_$(date '+%Y-%m-%d_%H:%M')_$(echo $RANDOM).png")))
+	;;([?\s-c] . (lambda ()
+	;;	     (interactive)
+	;;	     (start-process-shell-command "" nil "passmenu -l 16 -b")))
+	;;([?\C-s-c] . (lambda ()
+	;;	     (interactive)
+	;;	     (start-process-shell-command "" nil "passmenu --type -l 16 -b")))
+	;;([?\s-f] . (lambda ()
+	;;	    (interactive)
+	;;	    (start-process "" nil "/usr/bin/firefox")))
+	;;([?\C-s-f] . (lambda ()
+	;;	    (interactive)
+	;;	    (start-process "" nil "/usr/bin/firefox" "--private-window")))
+	;;([?\s-m] . (lambda ()
+	;;	    (interactive)
+	;;	    (start-process "" nil "/usr/bin/pcmanfm")))
+	;;([?\XF86AudioMute] . (lambda ()
+	;;	     (interactive)
+	;;	     (start-process-shell-command "" nil "amixer -q set Master toggle")))
+	))
 
 ;; To add a key binding only available in line-mode, simply define it in
 ;; `exwm-mode-map'.  The following example shortens 'C-c q' to 'C-q'.
@@ -425,8 +470,6 @@
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; Multiple screens with xrandr
-;obsolete? (require 'exwm-randr)
-;obsolete (exwm-randr-enable)
 (exwm-randr-mode 1)
 
 ;; Convenient editing for X windows
