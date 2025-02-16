@@ -19,8 +19,17 @@
   (setq gptel-backend (gptel-make-ollama
    "Ollama"
    :host "localhost:11434"
-   :models '("deepseek-r1" "qwen2.5-coder:7b-instruct" "gemma2:latest" "gemma2:2b")
+   :models '("deepseek-r1" "deepseek-r1:1.5b""qwen2.5-coder:7b-instruct" "gemma2:latest" "gemma2:2b")
    :stream t)))
+; ai code assistance with aider.el
+(use-package aider
+  ; uncomment ":init" and the line below it on first install
+  ;:init
+  ;(package-vc-install '(aider :url "https://github.com/tninja/aider.el"))
+  ; requires emacs 30:
+  ;:vc (:url "https://github.com/tninja/aider.el")
+  :config
+  (setq aider-args '("--model" "ollama_chat/deepseek-r1:1.5b" "--no-git")))
 ;(use-package org-ai :ensure t
 ;  :config
 ;  (add-hook 'org-mode-hook #'org-ai-mode)
@@ -72,6 +81,7 @@
 (use-package iedit :ensure t)
 (use-package gnuplot :ensure t)
 (use-package dmenu :ensure t)
+(use-package addressbook-bookmark :ensure t)
 ;;;** emms
 (use-package emms :ensure t
   :init
@@ -222,6 +232,42 @@
 
   Reply only in pure lisp expressions that can then be evaluated with \"eval-expression\". Do not include any comments or explanations. If the answer consists of multiple expressions, wrap them inside a \"progn\" form.")))
 
+;; launch programs and scripts
+(defun start-process-setkeyboardlayout ()
+  (interactive)
+  (start-process-shell-command "" nil "~/.local/bin/setkeyboardlayout.sh"))
+(defun start-process-firefox ()
+  (interactive)
+  (start-process "" nil "/usr/bin/firefox"))
+(defun start-process-firefox-private-window ()
+  (interactive)
+  (start-process "" nil "/usr/bin/firefox" "--private-window"))
+(defun start-process-passmenu-type ()
+  (interactive)
+  (start-process-shell-command "" nil "passmenu --type -l 16 -b"))
+(defun start-process-pcmanfm ()
+  (interactive)
+  (start-process "" nil "/usr/bin/pcmanfm"))
+
+;; volume controls
+(defun toggle-mute ()
+  (interactive)
+  (start-process-shell-command "" nil "amixer -q set Master toggle"))
+(defun volume-up ()
+  (interactive)
+  (start-process-shell-command "" nil "amixer -q set Master 1%+"))
+(defun volume-down ()
+  (interactive)
+  (start-process-shell-command "" nil "amixer -q set Master 1%-"))
+
+;; screenshots
+(defun capture-screenshot ()
+  (interactive)
+  (start-process-shell-command "" nil "import -window root ~/Pictures/screenshots/screenshot_$(date '+%Y-%m-%d_%H:%M')_$(echo $RANDOM).png"))
+(defun capture-screenshot-crop ()
+  (interactive)
+  (start-process-shell-command "" nil "import ~/Pictures/screenshots/screenshot_$(date '+%Y-%m-%d_%H:%M')_$(echo $RANDOM).png"))
+
 ;;;* Custom keybindings
 
 ;; general
@@ -279,8 +325,8 @@
 ;; M-<return> for eshell
 (global-set-key (kbd "M-<return>") 'eshell)
 
-;; C-s-d for dmenu
-(global-set-key (kbd "C-s-d") 'dmenu)
+;; s-x for dmenu
+(global-set-key (kbd "s-x") 'dmenu)
 
 ;; keybindings for multiple-cursors
 (global-set-key (kbd "C-. C-.") 'mc/edit-lines)
@@ -310,6 +356,25 @@
 (global-set-key (kbd "C-c <left>") 'emms-previous)
 (global-set-key (kbd "C-c <down>") 'emms-pause)
 (global-set-key (kbd "C-c <up>") 'emms-play-directory)
+
+;; aider.el keybindings
+(global-set-key (kbd "C-c t") 'aider-transient-menu)
+
+;; launch programs and scripts
+(global-set-key (kbd "s-m") 'start-process-pcmanfm)
+(global-set-key (kbd "s-SPC") 'start-process-setkeyboardlayout)
+(global-set-key (kbd "s-c") 'start-process-passmenu-type)
+(global-set-key (kbd "s-f") 'start-process-firefox)
+(global-set-key (kbd "C-s-f") 'start-process-firefox-private-window)
+
+;; volume controls
+(global-set-key (kbd "M-s-m") 'toggle-mute)
+(global-set-key (kbd "s-p") 'volume-up)
+(global-set-key (kbd "s-n") 'volume-down)
+
+;; screenshots
+(global-set-key (kbd "s-s") 'capture-screenshot)
+(global-set-key (kbd "M-s-s") 'capture-screenshot-crop)
 
 ;;;* Macros
 
@@ -382,52 +447,31 @@
 		    (interactive)
 		    (start-process "" nil "/usr/bin/slock")))
 	;; Bind "s-x" to dmenu_run
-	([?\s-x] . (lambda ()
-		     (interactive)
-		     (start-process "" nil "/usr/bin/dmenu_run" "-b")))
+	([?\s-x] . dmenu)
 	;; Bind "s-<escape>" to power menu
 	([s-escape] . (lambda ()
 		     (interactive)
 		     (start-process-shell-command "" nil "~/.local/bin/power.sh")))
-	;; Bind "s-<space>" to keyboard switcher
-	;;([s-space] . (lambda ()
-	;;	     (interactive)
-	;;	     (start-process-shell-command "" nil "~/.local/bin/setkeyboardlayout.sh")))
-	;;([?\s-s] . (lambda ()
-	;;	     (interactive)
-	;;	     (start-process-shell-command "" nil "import -window root Pictures/screenshots/screenshot_$(date '+%Y-%m-%d_%H:%M')_$(echo $RANDOM).png")))
-	;;([?\s-M-s] . (lambda ()
-	;;	     (interactive)
-	;;	     (start-process-shell-command "" nil "import Pictures/screenshots/screenshot_$(date '+%Y-%m-%d_%H:%M')_$(echo $RANDOM).png")))
-	;;([?\s-c] . (lambda ()
-	;;	     (interactive)
-	;;	     (start-process-shell-command "" nil "passmenu -l 16 -b")))
-	;;([?\C-s-c] . (lambda ()
-	;;	     (interactive)
-	;;	     (start-process-shell-command "" nil "passmenu --type -l 16 -b")))
-	;;([?\s-f] . (lambda ()
-	;;	    (interactive)
-	;;	    (start-process "" nil "/usr/bin/firefox")))
-	;;([?\C-s-f] . (lambda ()
-	;;	    (interactive)
-	;;	    (start-process "" nil "/usr/bin/firefox" "--private-window")))
-	;;([?\s-m] . (lambda ()
-	;;	    (interactive)
-	;;	    (start-process "" nil "/usr/bin/pcmanfm")))
-	;;([?\XF86AudioMute] . (lambda ()
-	;;	     (interactive)
-	;;	     (start-process-shell-command "" nil "amixer -q set Master toggle")))
 	))
 
 ;; To add a key binding only available in line-mode, simply define it in
 ;; `exwm-mode-map'.  The following example shortens 'C-c q' to 'C-q'.
 (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
-(define-key exwm-mode-map (kbd "C-;") 'other-window)
 (define-key exwm-mode-map (kbd "C-<tab>") 'next-buffer)
 (define-key exwm-mode-map (kbd "s-<tab>") 'previous-buffer)
 (define-key exwm-mode-map (kbd "C-<return>") 'vterm)
 (define-key exwm-mode-map (kbd "M-<return>") 'eshell)
 (define-key exwm-mode-map (kbd "C-c C-f") 'exwm-layout-toggle-fullscreen)
+(define-key exwm-mode-map (kbd "s-m") 'start-process-pcmanfm)
+(define-key exwm-mode-map (kbd "s-SPC") 'start-process-setkeyboardlayout)
+(define-key exwm-mode-map (kbd "s-c") 'start-process-passmenu-type)
+(define-key exwm-mode-map (kbd "s-f") 'start-process-firefox)
+(define-key exwm-mode-map (kbd "C-s-f") 'start-process-firefox-private-window)
+(define-key exwm-mode-map (kbd "M-s-m") 'toggle-mute)
+(define-key exwm-mode-map (kbd "s-p") 'volume-up)
+(define-key exwm-mode-map (kbd "s-n") 'volume-down)
+(define-key exwm-mode-map (kbd "s-s") 'capture-screenshot)
+(define-key exwm-mode-map (kbd "M-s-s") 'capture-screenshot-crop)
 
 ;; The following example demonstrates how to use simulation keys to mimic
 ;; the behavior of Emacs.  The value of `exwm-input-simulation-keys` is a
