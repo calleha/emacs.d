@@ -12,7 +12,22 @@
   :config
   (add-hook 'org-mode-hook #'org-modern-mode)
   (add-hook 'org-agenda-finalize-hook #'org-modern-agenda))
-; ai assistance - requires ollama with local llm
+; presentation mode turning org headlines into slides
+(use-package org-present :ensure t
+  :init
+  (use-package visual-fill-column :ensure t)
+  :config
+  (setq visual-fill-column-width 110
+        visual-fill-column-center-text t)
+  (add-hook 'org-present-mode-hook (lambda ()
+  				     (visual-fill-column-mode 1)
+  				     (display-line-numbers-mode -1)
+  				     (visual-line-mode 1)))
+  (add-hook 'org-present-mode-quit-hook (lambda ()
+  				     (visual-fill-column-mode -1)
+  				     (display-line-numbers-mode 1)
+  				     (visual-line-mode -1))))
+;;;** ai assistance - requires ollama with local llm
 (use-package gptel :ensure t
   :config
   (setq gptel-default-mode 'org-mode)
@@ -30,24 +45,6 @@
   ;:vc (:url "https://github.com/tninja/aider.el")
   :config
   (setq aider-args '("--model" "ollama_chat/deepseek-r1:1.5b" "--no-git")))
-;(use-package org-ai :ensure t
-;  :config
-;  (add-hook 'org-mode-hook #'org-ai-mode)
-;  (org-ai-global-mode))
-(use-package org-present :ensure t
-  :init
-  (use-package visual-fill-column :ensure t)
-  :config
-  (setq visual-fill-column-width 110
-        visual-fill-column-center-text t)
-  (add-hook 'org-present-mode-hook (lambda ()
-  				     (visual-fill-column-mode 1)
-  				     (display-line-numbers-mode -1)
-  				     (visual-line-mode 1)))
-  (add-hook 'org-present-mode-quit-hook (lambda ()
-  				     (visual-fill-column-mode -1)
-  				     (display-line-numbers-mode 1)
-  				     (visual-line-mode -1))))
 ;;;** multiple-cursors, which-key, vertico, corfu
 (use-package multiple-cursors :ensure t)
 (use-package which-key :ensure t
@@ -66,10 +63,6 @@
   (setq pdf-view-midnight-colors `(,(face-attribute 'default :foreground) .
                                    ,(face-attribute 'default :background)))
   (add-hook 'pdf-view-mode-hook 'auto-revert-mode))
-;;;** notmuch
-;(use-package notmuch
-;  :init
-;  (autoload 'notmuch "notmuch" "notmuch mail" t))
 ;;;** all the packages I forgot to add before
 (use-package vterm :ensure t)
 (use-package sudo-edit :ensure t)
@@ -133,10 +126,15 @@
 (setq enable-recursive-minibuffers 1)
 
 ;;;*** mail
+(setq mail-host-address "disroot.org")
+; outgoing
 (setq send-mail-function    'smtpmail-send-it
-      smtpmail-smtp-server  "smtp.gmail.com"
-      smtpmail-stream-type  'ssl
-      smtpmail-smtp-service 465)
+      smtpmail-smtp-server  "disroot.org"
+      smtpmail-stream-type  'starttls
+      smtpmail-smtp-service 587)
+; incoming
+(setq gnus-select-method
+      '(nnimap "disroot.org"))
 
 ;;;** Aesthetics
 
@@ -236,6 +234,9 @@
 (defun start-process-setkeyboardlayout ()
   (interactive)
   (start-process-shell-command "" nil "~/.local/bin/setkeyboardlayout.sh"))
+(defun start-process-trackpoint-configuration ()
+  (interactive)
+  (async-shell-command "" nil "sudo ~/.local/bin/trackpoint_configuration.sh"))
 (defun start-process-firefox ()
   (interactive)
   (start-process "" nil "/usr/bin/firefox"))
@@ -248,6 +249,9 @@
 (defun start-process-pcmanfm ()
   (interactive)
   (start-process "" nil "/usr/bin/pcmanfm"))
+(defun start-process-unclutter-5s ()
+  (interactive)
+  (start-process-shell-command "" nil "unclutter -idle 5 -root"))
 
 ;; volume controls
 (defun toggle-mute ()
@@ -267,6 +271,24 @@
 (defun capture-screenshot-crop ()
   (interactive)
   (start-process-shell-command "" nil "import ~/Pictures/screenshots/screenshot_$(date '+%Y-%m-%d_%H:%M')_$(echo $RANDOM).png"))
+
+;; set keyboard repeat rate and disable system beep
+(defun start-process-xset-kbrate-200-60 ()
+  (interactive)
+  (start-process-shell-command "" nil "xset rate 200 60"))
+(defun start-process-xset-kbbeep-off ()
+  (interactive)
+  (start-process-shell-command "" nil "xset b off"))
+
+;; setkeyboardlayout-default (us ctrl:nocaps)
+(defun start-process-setkeyboardlayout-default ()
+  (interactive)
+  (start-process-shell-command "" nil "setxkbmap -layout us -option ctrl:nocaps"))
+
+;; touchpad-enable-natural-scrolling
+(defun start-process-touchpad-enable-natural-scrolling ()
+  (interactive)
+  (start-process-shell-command "" nil "xinput set-prop "Synaptics tm2964-001" "libinput Natural Scrolling Enabled" 1"))
 
 ;;;* Custom keybindings
 
@@ -316,8 +338,12 @@
 ;; C-c d to toggle pdf-view-midnight-minor-mode
 (global-set-key (kbd "C-c d") 'pdf-view-midnight-minor-mode)
 
-;; C-c r to toggle repeat-mode
-(global-set-key (kbd "C-c r") 'repeat-mode)
+;; C-c r to toggle appt-activate (notifications)
+(global-set-key (kbd "C-c r") 'appt-activate)
+(global-set-key (kbd "C-c C-r") 'org-agenda-to-appt)
+
+;; C-c p to toggle org-present-mode
+(global-set-key (kbd "C-c p") 'org-present)
 
 ;; C-<return> for vterm
 (global-set-key (kbd "C-<return>") 'vterm)
@@ -345,8 +371,8 @@
 (global-set-key (kbd "C-:") 'avy-goto-char)
 (global-set-key (kbd "C-c C-;") 'avy-goto-word-1)
 
-;; s-M opens up notmuch from any buffer
-;(global-set-key (kbd "s-M") `notmuch)
+;; gnus email and news
+(global-set-key (kbd "C-c g") 'gnus)
 
 ;; god-mode keybindings
 (global-set-key (kbd "<escape>") #'god-local-mode)
@@ -525,4 +551,11 @@
 (use-package exwm-modeline :ensure t
   :config
   (exwm-modeline-mode 1))
+
+;; autostart linux programs
+(start-process-xset-kbrate-200-60)
+(start-process-xset-kbbeep-off)
+(start-process-setkeyboardlayout-default)
+(start-process-touchpad-enable-natural-scrolling)
+(start-process-unclutter-5s)
 )
