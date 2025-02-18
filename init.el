@@ -275,7 +275,7 @@
 ;; set keyboard repeat rate and disable system beep
 (defun start-process-xset-kbrate-200-60 ()
   (interactive)
-  (start-process-shell-command "" nil "xset rate 200 60"))
+  (start-process-shell-command "" nil "xset r rate 200 60"))
 (defun start-process-xset-kbbeep-off ()
   (interactive)
   (start-process-shell-command "" nil "xset b off"))
@@ -288,7 +288,7 @@
 ;; touchpad-enable-natural-scrolling
 (defun start-process-touchpad-enable-natural-scrolling ()
   (interactive)
-  (start-process-shell-command "" nil "xinput set-prop "Synaptics tm2964-001" "libinput Natural Scrolling Enabled" 1"))
+  (start-process-shell-command "" nil "xinput set-prop 'Synaptics tm2964-001' 'libinput Natural Scrolling Enabled' 1"))
 
 ;;;* Custom keybindings
 
@@ -326,7 +326,7 @@
 ;; C-c q to toggle visual-line-mode
 (global-set-key (kbd "C-c q") 'visual-line-mode)
 
-;; C-c e to toggle electric-pair-mode (normally disabled, binding used by org-ai)
+;; C-c e to toggle electric-pair-mode
 (global-set-key (kbd "C-c e") 'electric-pair-mode)
 
 ;; C-c n to toggle display-line-numbers-mode
