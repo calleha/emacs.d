@@ -220,15 +220,15 @@
 
 ;; M-: M-" to perform emacs actions with AI
 ;; interactive org-ai-prompt which returns emacs-lisp expressions
-(defun org-ai-elisp ()
-  (interactive)
-  "Prompts the user for an action within Emacs which is translated to elisp."
-  (let ((prompt-string "Perform an action: "))
-    (org-ai-prompt
-     (read-from-minibuffer prompt-string)
-     :sys-prompt "You are an expert at Emacs, and Emacs Lisp, which is used to script and extend Emacs. You can understand natural language requests for actions to take within Emacs, then translate them to Emacs Lisp that carries out those actions.
-
-  Reply only in pure lisp expressions that can then be evaluated with \"eval-expression\". Do not include any comments or explanations. If the answer consists of multiple expressions, wrap them inside a \"progn\" form.")))
+;(defun org-ai-elisp ()
+;  (interactive)
+;  "Prompts the user for an action within Emacs which is translated to elisp."
+;  (let ((prompt-string "Perform an action: "))
+;    (org-ai-prompt
+;     (read-from-minibuffer prompt-string)
+;     :sys-prompt "You are an expert at Emacs, and Emacs Lisp, which is used to script and extend Emacs. You can understand natural language requests for actions to take within Emacs, then translate them to Emacs Lisp that carries out those actions.
+;
+;  Reply only in pure lisp expressions that can then be evaluated with \"eval-expression\". Do not include any comments or explanations. If the answer consists of multiple expressions, wrap them inside a \"progn\" form.")))
 
 ;; launch programs and scripts
 (defun start-process-setkeyboardlayout ()
@@ -359,10 +359,6 @@
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-. C-<") 'mc/mark-all-like-this)
-
-;; org-ai keybindings (disabled, C-c e used by electric-pair-mode)
-;(global-set-key (kbd "C-c p") 'org-ai-prompt)
-;(global-set-key (kbd "C-c e") 'org-ai-explain-code)
 
 ;; toggle mini-modeline
 (global-set-key (kbd "C-c h") 'mini-modeline-mode)
