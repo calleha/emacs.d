@@ -306,22 +306,28 @@
 ;;;* Custom keybindings
 
 ;; general
-(global-set-key (kbd "C-x C-0") 'delete-window)
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
-(global-set-key (kbd "C-x C-1") 'zygospore-toggle-delete-other-windows)
+(global-set-key (kbd "H-0") 'delete-window)
+(global-set-key (kbd "H-1") 'zygospore-toggle-delete-other-windows)
+(global-set-key (kbd "H-2") 'split-window-below)
+(global-set-key (kbd "H-3") 'split-window-right)
 (global-set-key (kbd "H-o") 'other-window)
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "M-n") 'forward-paragraph)
 (global-set-key (kbd "C-<tab>") 'next-buffer)
 (global-set-key (kbd "s-<tab>") 'previous-buffer)
+(global-set-key (kbd "H-<tab>") 'switch-to-buffer)
 (global-set-key (kbd "C-,") 'duplicate-line)
+(global-set-key (kbd "H-d") 'duplicate-line)
+(global-set-key (kbd "H-u") 'undo)
 
 ;; calling custom functions
 (global-set-key (kbd "C-x C-2") 'split-window-below-and-move)
 (global-set-key (kbd "C-x C-3") 'split-window-right-and-move)
 (global-set-key (kbd "C-c w") 'kill-whole-word)
-(global-set-key (kbd "C-c C-w") 'kill-whole-word)
+(global-set-key (kbd "H-w") 'kill-whole-word)
 (global-set-key (kbd "C-c C-l") 'kill-whole-line)
+(global-set-key (kbd "H-k") 'kill-whole-line)
 (global-set-key (kbd "M-w") 'kill-ring-save-line-or-region)
 (global-set-key (kbd "C-s-x C-s-k") 'kill-all-buffers)
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
