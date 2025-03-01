@@ -236,7 +236,7 @@
   (start-process-shell-command "" nil "~/.local/bin/setkeyboardlayout.sh"))
 (defun start-process-trackpoint-configuration ()
   (interactive)
-  (async-shell-command "" nil "sudo ~/.local/bin/trackpoint_configuration.sh"))
+  (async-shell-command "sudo ~/.local/bin/trackpoint_configuration.sh"))
 (defun start-process-firefox ()
   (interactive)
   (start-process "" nil "/usr/bin/firefox"))
@@ -285,10 +285,23 @@
   (interactive)
   (start-process-shell-command "" nil "setxkbmap -layout us -option ctrl:nocaps"))
 
+;; setkeyboardlayout-swapped
+;; Left Alt as Ctrl, Left Ctrl as Win, Left Win as Left Alt
+;; Swap Right Alt with Right Ctrl
+;; Make Caps Lock an additional Hyper
+(defun start-process-setkeyboardlayout-swapped ()
+  (interactive)
+  (start-process-shell-command "" nil "setxkbmap -layout us -option ctrl:swap_lalt_lctl_lwin -option ctrl:swap_ralt_rctl -option caps:hyper"))
+
 ;; touchpad-enable-natural-scrolling
 (defun start-process-touchpad-enable-natural-scrolling ()
   (interactive)
   (start-process-shell-command "" nil "xinput set-prop 'Synaptics tm2964-001' 'libinput Natural Scrolling Enabled' 1"))
+
+;; print-keyboard-layout-options
+(defun print-keyboard-layout-options ()
+  (interactive)
+  (async-shell-command "grep -E '(ctrl|alt|win|caps):' /usr/share/X11/xkb/rules/base.lst"))
 
 ;;;* Custom keybindings
 
@@ -296,6 +309,7 @@
 (global-set-key (kbd "C-x C-0") 'delete-window)
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
 (global-set-key (kbd "C-x C-1") 'zygospore-toggle-delete-other-windows)
+(global-set-key (kbd "H-o") 'other-window)
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "M-n") 'forward-paragraph)
 (global-set-key (kbd "C-<tab>") 'next-buffer)
@@ -551,7 +565,7 @@
 ;; autostart linux programs
 (start-process-xset-kbrate-200-60)
 (start-process-xset-kbbeep-off)
-(start-process-setkeyboardlayout-default)
+(start-process-setkeyboardlayout-swapped)
 (start-process-touchpad-enable-natural-scrolling)
 (start-process-unclutter-5s)
 )
