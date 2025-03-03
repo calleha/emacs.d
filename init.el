@@ -320,6 +320,7 @@
 (global-set-key (kbd "C-,") 'duplicate-line)
 (global-set-key (kbd "H-d") 'duplicate-line)
 (global-set-key (kbd "H-u") 'undo)
+(global-set-key (kbd "H-x H-e") 'eval-region)
 
 ;; calling custom functions
 (global-set-key (kbd "C-x C-2") 'split-window-below-and-move)
@@ -499,8 +500,14 @@
 ;; To add a key binding only available in line-mode, simply define it in
 ;; `exwm-mode-map'.  The following example shortens 'C-c q' to 'C-q'.
 (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
+(define-key exwm-mode-map (kbd "H-0") 'delete-window)
+(define-key exwm-mode-map (kbd "H-1") 'zygospore-toggle-delete-other-windows)
+(define-key exwm-mode-map (kbd "H-2") 'split-window-below)
+(define-key exwm-mode-map (kbd "H-3") 'split-window-right)
+(define-key exwm-mode-map (kbd "H-o") 'other-window)
 (define-key exwm-mode-map (kbd "C-<tab>") 'next-buffer)
 (define-key exwm-mode-map (kbd "s-<tab>") 'previous-buffer)
+(define-key exwm-mode-map (kbd "H-<tab>") 'switch-to-buffer)
 (define-key exwm-mode-map (kbd "C-<return>") 'vterm)
 (define-key exwm-mode-map (kbd "M-<return>") 'eshell)
 (define-key exwm-mode-map (kbd "C-c C-f") 'exwm-layout-toggle-fullscreen)
