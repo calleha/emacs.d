@@ -126,6 +126,9 @@
 ; enable recursive minibuffers
 (setq enable-recursive-minibuffers 1)
 
+; ignore case in buffer completions
+(setq read-buffer-completion-ignore-case 1)
+
 ;;;*** mail
 (setq mail-host-address "disroot.org")
 ; outgoing
