@@ -96,6 +96,7 @@
 (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
 (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
 (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
+(add-hook 'shell-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 ; wrap lines
 (global-visual-line-mode 1)
