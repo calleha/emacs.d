@@ -75,6 +75,7 @@
 (use-package gnuplot :ensure t)
 (use-package dmenu :ensure t)
 (use-package addressbook-bookmark :ensure t)
+(use-package pinentry :ensure t)
 ;;;** emms
 (use-package emms :ensure t
   :init

@@ -18,7 +18,7 @@
  '(org-export-backends '(ascii beamer html icalendar latex odt))
  '(org-export-with-toc nil)
  '(package-selected-packages
-   '(aider addressbook-bookmark exwm-modeline exwm gnu-elpa-keyring-update magit iedit gptel vertico emms visual-fill-column org-present god-mode avy corfu org-modern org-ai mini-modeline zygospore sudo-edit vterm org-ref pdf-tools dmenu yasnippet exwm-edit gnuplot gnuplot-mode multiple-cursors which-key ##))
+   '(pinentry aider addressbook-bookmark exwm-modeline exwm gnu-elpa-keyring-update magit iedit gptel vertico emms visual-fill-column org-present god-mode avy corfu org-modern org-ai mini-modeline zygospore sudo-edit vterm org-ref pdf-tools dmenu yasnippet exwm-edit gnuplot gnuplot-mode multiple-cursors which-key ##))
  '(package-vc-selected-packages '((aider :url "https://github.com/tninja/aider.el"))))
 
 (custom-set-faces
