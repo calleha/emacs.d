@@ -193,7 +193,7 @@
   (backward-kill-word 1))
 
 ;; kill-whole-line
-(defun kill-whole-line ()
+(defun kill-whole-line-custom ()
   (interactive)
   (move-beginning-of-line 1)
   (kill-line 1))
@@ -325,17 +325,17 @@
 (global-set-key (kbd "s-<tab>") 'previous-buffer)
 (global-set-key (kbd "H-<tab>") 'switch-to-buffer)
 (global-set-key (kbd "H-k") 'kill-buffer)
-(global-set-key (kbd "C-,") 'duplicate-line)
-(global-set-key (kbd "H-d") 'duplicate-line)
+(global-set-key (kbd "H-y") 'duplicate-line)
 (global-set-key (kbd "H-u") 'undo)
 (global-set-key (kbd "H-x H-e") 'eval-region)
+(global-set-key (kbd "H-w") 'kill-paragraph)
 
 ;; calling custom functions
 (global-set-key (kbd "C-x C-2") 'split-window-below-and-move)
 (global-set-key (kbd "C-x C-3") 'split-window-right-and-move)
 (global-set-key (kbd "C-c w") 'kill-whole-word)
-(global-set-key (kbd "H-w") 'kill-whole-word)
-(global-set-key (kbd "C-c C-l") 'kill-whole-line)
+(global-set-key (kbd "H-d") 'kill-whole-word)
+(global-set-key (kbd "C-c C-l") 'kill-whole-line-custom)
 (global-set-key (kbd "M-w") 'kill-ring-save-line-or-region)
 (global-set-key (kbd "C-s-x C-s-k") 'kill-all-buffers)
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
@@ -348,68 +348,44 @@
 (global-set-key "\C-cb" 'org-switchb)
 
 ;; modes and command shortcuts
-;; C-c m to compile
 (global-set-key (kbd "C-c m") 'compile)
-
-;; C-c q to toggle visual-line-mode
+(global-set-key (kbd "C-c g") 'gnus)
 (global-set-key (kbd "C-c q") 'visual-line-mode)
-
-;; C-c e to toggle electric-pair-mode
 (global-set-key (kbd "C-c e") 'electric-pair-mode)
-
-;; C-c n to toggle display-line-numbers-mode
 (global-set-key (kbd "C-c n") 'display-line-numbers-mode)
-
-;; C-c C-b to toggle menu-bar-mode
 (global-set-key (kbd "C-c C-b") 'menu-bar-mode)
-
-;; C-c d to toggle pdf-view-midnight-minor-mode
-(global-set-key (kbd "C-c d") 'pdf-view-midnight-minor-mode)
-
-;; C-c r to toggle appt-activate (notifications)
+;; agenda and notifications
 (global-set-key (kbd "C-c r") 'appt-activate)
+(global-set-key (kbd "H-a t") 'appt-activate)
+(global-set-key (kbd "H-a a") 'org-agenda-list)
 (global-set-key (kbd "C-c C-r") 'org-agenda-to-appt)
+(global-set-key (kbd "H-a H-s") 'org-agenda-to-appt)
+(global-set-key (kbd "H-a H-a") 'org-cycle-agenda-files)
 
-;; C-c p to toggle org-present-mode
+; keybindings for extensions
+(global-set-key (kbd "C-c d") 'pdf-view-midnight-minor-mode)
 (global-set-key (kbd "C-c p") 'org-present)
-
-;; C-<return> for vterm
 (global-set-key (kbd "C-<return>") 'vterm)
-
-;; M-<return> for eshell
 (global-set-key (kbd "M-<return>") 'eshell)
-
-;; s-x for dmenu
 (global-set-key (kbd "s-x") 'dmenu)
-
-;; keybindings for multiple-cursors
+(global-set-key (kbd "C-c h") 'mini-modeline-mode)
+(global-set-key (kbd "H-<escape>") #'god-local-mode)
+(global-set-key (kbd "C-c t") 'aider-transient-menu)
+;; multiple-cursors
 (global-set-key (kbd "C-. C-.") 'mc/edit-lines)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-. C-<") 'mc/mark-all-like-this)
-
-;; toggle mini-modeline
-(global-set-key (kbd "C-c h") 'mini-modeline-mode)
-
 ;; avy
 (global-set-key (kbd "C-:") 'avy-goto-char)
 (global-set-key (kbd "C-c C-;") 'avy-goto-word-1)
-
-;; gnus email and news
-(global-set-key (kbd "C-c g") 'gnus)
-
-;; god-mode keybindings
-(global-set-key (kbd "<escape>") #'god-local-mode)
-
 ;; emms
 (global-set-key (kbd "C-c <right>") 'emms-next)
 (global-set-key (kbd "C-c <left>") 'emms-previous)
 (global-set-key (kbd "C-c <down>") 'emms-pause)
 (global-set-key (kbd "C-c <up>") 'emms-play-directory)
 
-;; aider.el keybindings
-(global-set-key (kbd "C-c t") 'aider-transient-menu)
-
+; keybindings for stuff outside of emacs
 ;; launch programs and scripts
 (global-set-key (kbd "s-m") 'start-process-pcmanfm)
 (global-set-key (kbd "s-SPC") 'start-process-setkeyboardlayout)

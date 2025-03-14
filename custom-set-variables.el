@@ -14,7 +14,8 @@
       ((agenda "" nil)
        (alltodo "" nil))
       nil)))
- '(org-agenda-files '("/home/calleha/Documents/reminders.org"))
+ '(org-agenda-files
+   '("/home/calleha/Documents/reminders.org"))
  '(org-export-backends '(ascii beamer html icalendar latex odt))
  '(org-export-with-toc nil)
  '(package-selected-packages
