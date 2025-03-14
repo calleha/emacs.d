@@ -324,21 +324,21 @@
 (global-set-key (kbd "C-<tab>") 'next-buffer)
 (global-set-key (kbd "s-<tab>") 'previous-buffer)
 (global-set-key (kbd "H-<tab>") 'switch-to-buffer)
-(global-set-key (kbd "H-k") 'kill-buffer)
+(global-set-key (kbd "H-k") 'kill-paragraph)
+(global-set-key (kbd "H-w") 'backward-kill-paragraph)
 (global-set-key (kbd "H-y") 'duplicate-line)
 (global-set-key (kbd "H-u") 'undo)
 (global-set-key (kbd "H-x H-e") 'eval-region)
-(global-set-key (kbd "H-w") 'kill-paragraph)
 
 ;; calling custom functions
 (global-set-key (kbd "C-x C-2") 'split-window-below-and-move)
 (global-set-key (kbd "C-x C-3") 'split-window-right-and-move)
-(global-set-key (kbd "C-c w") 'kill-whole-word)
+(global-set-key (kbd "H-x k") 'kill-current-buffer)
 (global-set-key (kbd "H-d") 'kill-whole-word)
 (global-set-key (kbd "C-c C-l") 'kill-whole-line-custom)
 (global-set-key (kbd "M-w") 'kill-ring-save-line-or-region)
 (global-set-key (kbd "C-s-x C-s-k") 'kill-all-buffers)
-(global-set-key (kbd "C-x k") 'kill-current-buffer)
+
 ;(global-set-key (kbd "M-\"") 'org-ai-elisp)
 
 ;; (org-mode) The following lines are always needed.  Choose your own keys.
