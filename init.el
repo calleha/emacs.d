@@ -348,6 +348,8 @@
 (global-set-key "\C-cb" 'org-switchb)
 
 ;; modes and command shortcuts
+(global-set-key (kbd "M-<return>") 'eshell)
+(global-set-key (kbd "H-<return>") 'async-shell-command)
 (global-set-key (kbd "C-c m") 'compile)
 (global-set-key (kbd "C-c g") 'gnus)
 (global-set-key (kbd "C-c q") 'visual-line-mode)
@@ -366,7 +368,6 @@
 (global-set-key (kbd "C-c d") 'pdf-view-midnight-minor-mode)
 (global-set-key (kbd "C-c p") 'org-present)
 (global-set-key (kbd "C-<return>") 'vterm)
-(global-set-key (kbd "M-<return>") 'eshell)
 (global-set-key (kbd "s-x") 'dmenu)
 (global-set-key (kbd "C-c h") 'mini-modeline-mode)
 (global-set-key (kbd "H-<escape>") #'god-local-mode)
@@ -424,7 +425,7 @@
 (require 'exwm)
 
 ;; Set the initial number of workspaces (they can also be created later).
-(setq exwm-workspace-number 5)
+(setq exwm-workspace-number 1)
 
 ;; All buffers created in EXWM mode are named "*EXWM*". You may want to
 ;; change it in `exwm-update-class-hook' and `exwm-update-title-hook', which
@@ -493,9 +494,10 @@
 (define-key exwm-mode-map (kbd "C-<tab>") 'next-buffer)
 (define-key exwm-mode-map (kbd "s-<tab>") 'previous-buffer)
 (define-key exwm-mode-map (kbd "H-<tab>") 'switch-to-buffer)
-(define-key exwm-mode-map (kbd "H-k") 'kill-buffer)
+(define-key exwm-mode-map (kbd "H-x k") 'kill-current-buffer)
 (define-key exwm-mode-map (kbd "C-<return>") 'vterm)
 (define-key exwm-mode-map (kbd "M-<return>") 'eshell)
+(define-key exwm-mode-map (kbd "H-<return>") 'async-shell-command)
 (define-key exwm-mode-map (kbd "C-c C-f") 'exwm-layout-toggle-fullscreen)
 (define-key exwm-mode-map (kbd "s-m") 'start-process-pcmanfm)
 (define-key exwm-mode-map (kbd "s-SPC") 'start-process-setkeyboardlayout)
