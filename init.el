@@ -550,10 +550,6 @@
 ;; uncommenting the following line.
 ;(setq exwm-workspace-minibuffer-position 'bottom)
 
-;; Do not forget to enable EXWM. It will start by itself when things are
-;; ready.  You can put it _anywhere_ in your configuration.
-(exwm-enable)
-
 ;; Open ediff control panel in a new window instead of a new frame
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
@@ -571,10 +567,12 @@
   (exwm-modeline-mode 1))
 
 ;; autostart linux programs
-(exwm-startup-configuration)
 (start-process-xset-kbrate-200-60)
 (start-process-xset-kbbeep-off)
 (start-process-setkeyboardlayout-swapped)
 (start-process-touchpad-enable-natural-scrolling)
 (start-process-unclutter-5s)
-)
+(exwm-startup-configuration)
+
+;; launch exwm
+(exwm-enable))
