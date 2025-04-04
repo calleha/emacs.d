@@ -38,11 +38,11 @@
    :stream t)))
 ; ai code assistance with aider.el
 (use-package aider
-  ; uncomment ":init" and the line below it on first install
+  ; below emacs 30: uncomment ":init" and the line below it on first install only, or simply evaluate the line inside emacs
   ;:init
   ;(package-vc-install '(aider :url "https://github.com/tninja/aider.el"))
   ; requires emacs 30:
-  ;:vc (:url "https://github.com/tninja/aider.el")
+  :vc (:url "https://github.com/tninja/aider.el")
   :config
   (setq aider-args '("--model" "ollama_chat/deepseek-r1:1.5b" "--no-git")))
 ;;;** multiple-cursors, which-key, vertico, corfu
@@ -356,6 +356,7 @@
 (global-set-key (kbd "C-c e") 'electric-pair-mode)
 (global-set-key (kbd "C-c n") 'display-line-numbers-mode)
 (global-set-key (kbd "C-c C-b") 'menu-bar-mode)
+(global-set-key (kbd "C-c t") 'global-tab-line-mode)
 ;; agenda and notifications
 (global-set-key (kbd "C-c r") 'appt-activate)
 (global-set-key (kbd "H-a t") 'appt-activate)
@@ -371,7 +372,7 @@
 (global-set-key (kbd "s-x") 'dmenu)
 (global-set-key (kbd "C-c h") 'mini-modeline-mode)
 (global-set-key (kbd "H-<escape>") #'god-local-mode)
-(global-set-key (kbd "C-c t") 'aider-transient-menu)
+(global-set-key (kbd "H-c a") 'aider-transient-menu)
 ;; multiple-cursors
 (global-set-key (kbd "C-. C-.") 'mc/edit-lines)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
