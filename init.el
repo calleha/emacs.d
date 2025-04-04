@@ -257,6 +257,11 @@
 (defun start-process-unclutter-5s ()
   (interactive)
   (start-process-shell-command "" nil "unclutter -idle 5 -root"))
+(defun exwm-startup-configuration ()
+  (interactive)
+  (start-process-shell-command "" nil "xhost +SI:localuser:$USER")
+  (start-process-shell-command "" nil "export _JAVA_AWT_WM_NONREPARENTING=1")
+  (start-process-shell-command "" nil "xsetroot -cursor_name left_ptr"))
 
 ;; volume controls
 (defun toggle-mute ()
@@ -372,6 +377,7 @@
 (global-set-key (kbd "s-x") 'dmenu)
 (global-set-key (kbd "C-c h") 'mini-modeline-mode)
 (global-set-key (kbd "H-<escape>") #'god-local-mode)
+(global-set-key (kbd "H-c g") 'gptel)
 (global-set-key (kbd "H-c a") 'aider-transient-menu)
 ;; multiple-cursors
 (global-set-key (kbd "C-. C-.") 'mc/edit-lines)
@@ -565,6 +571,7 @@
   (exwm-modeline-mode 1))
 
 ;; autostart linux programs
+(exwm-startup-configuration)
 (start-process-xset-kbrate-200-60)
 (start-process-xset-kbbeep-off)
 (start-process-setkeyboardlayout-swapped)
