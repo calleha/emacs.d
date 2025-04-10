@@ -289,6 +289,10 @@
 (defun start-process-xset-kbbeep-off ()
   (interactive)
   (start-process-shell-command "" nil "xset b off"))
+;; disable screen saver
+(defun start-process-xset-s-off-dpms ()
+  (interactive)
+  (start-process-shell-command "" nil "xset s off -dpms"))
 
 ;; setkeyboardlayout-default (us ctrl:nocaps)
 (defun start-process-setkeyboardlayout-default ()
@@ -569,6 +573,7 @@
 ;; autostart linux programs
 (start-process-xset-kbrate-200-60)
 (start-process-xset-kbbeep-off)
+(start-process-xset-s-off-dpms)
 (start-process-setkeyboardlayout-swapped)
 (start-process-touchpad-enable-natural-scrolling)
 (start-process-unclutter-5s)
