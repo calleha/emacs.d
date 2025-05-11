@@ -27,22 +27,21 @@
   				     (visual-fill-column-mode -1)
   				     (display-line-numbers-mode 1)
   				     (visual-line-mode -1))))
-;;;** ai assistance - requires ollama with local llm
+;;;** ai assistance - requires ollama with local llm, or working api key
 (use-package gptel :ensure t
   :config
   (setq gptel-default-mode 'org-mode)
-  (setq gptel-backend (gptel-make-ollama
+  (setq gptel-model 'gemini-2.5-pro-exp-03-25)
+  (setq gptel-backend (gptel-make-gemini "Gemini"
+			:key (auth-source-search :host "generativelanguage.googleapis.com")
+			:stream t))
+  (gptel-make-ollama
    "Ollama"
    :host "localhost:11434"
    :models '("deepseek-r1" "deepseek-r1:1.5b""qwen2.5-coder:7b-instruct" "gemma2:latest" "gemma2:2b")
-   :stream t)))
+   :stream t))
 ; ai code assistance with aider.el
-(use-package aider
-  ; below emacs 30: uncomment ":init" and the line below it on first install only, or simply evaluate the line inside emacs
-  ;:init
-  ;(package-vc-install '(aider :url "https://github.com/tninja/aider.el"))
-  ; requires emacs 30:
-  :vc (:url "https://github.com/tninja/aider.el")
+(use-package aider :ensure t
   :config
   (setq aider-args '("--model" "ollama_chat/deepseek-r1:1.5b" "--no-git")))
 ;;;** multiple-cursors, which-key, vertico, corfu
@@ -68,7 +67,6 @@
 (use-package sudo-edit :ensure t)
 (use-package avy :ensure t)
 (use-package god-mode :ensure t)
-(use-package mini-modeline :ensure t)
 (use-package zygospore :ensure t)
 (use-package magit :ensure t)
 (use-package iedit :ensure t)
@@ -379,7 +377,6 @@
 (global-set-key (kbd "C-c p") 'org-present)
 (global-set-key (kbd "C-<return>") 'vterm)
 (global-set-key (kbd "s-x") 'dmenu)
-(global-set-key (kbd "C-c h") 'mini-modeline-mode)
 (global-set-key (kbd "H-<escape>") #'god-local-mode)
 (global-set-key (kbd "H-c g") 'gptel)
 (global-set-key (kbd "H-c a") 'aider-transient-menu)
@@ -559,11 +556,6 @@
 
 ;; Multiple screens with xrandr
 (exwm-randr-mode 1)
-
-;; Convenient editing for X windows
-(use-package exwm-edit :ensure t
-  :init
-  (require 'exwm-edit))
 
 ;; exwm-modeline
 (use-package exwm-modeline :ensure t
