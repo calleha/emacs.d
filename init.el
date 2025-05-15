@@ -31,16 +31,14 @@
 (use-package gptel :ensure t
   :config
   (setq gptel-default-mode 'org-mode)
-  (setq gptel-model 'gemini-2.5-pro-exp-03-25)
-  (setq gptel-backend (gptel-make-gemini "Gemini"
-			:key (auth-source-search :host "generativelanguage.googleapis.com")
-			:stream t))
+  (setq gptel-model 'deepseek-r1:1.5b)
+  (setq gptel-backend
   (gptel-make-ollama
    "Ollama"
    :host "localhost:11434"
    :models '("deepseek-r1" "deepseek-r1:1.5b""qwen2.5-coder:7b-instruct" "gemma2:latest" "gemma2:2b")
-   :stream t))
-; ai code assistance with aider.el
+   :stream t)))
+; ai code assistance with aider.el - requires aider
 (use-package aider :ensure t
   :config
   (setq aider-args '("--model" "ollama_chat/deepseek-r1:1.5b" "--no-git")))
@@ -174,6 +172,7 @@
 
 ;;;* Custom functions
 
+;;;** Editing
 ;; move to window when splitting
 (defun split-window-below-and-move ()
   (interactive)
@@ -221,17 +220,11 @@
   (interactive)
   (kill-buffer (current-buffer)))
 
-;; M-: M-" to perform emacs actions with AI
-;; interactive org-ai-prompt which returns emacs-lisp expressions
-;(defun org-ai-elisp ()
-;  (interactive)
-;  "Prompts the user for an action within Emacs which is translated to elisp."
-;  (let ((prompt-string "Perform an action: "))
-;    (org-ai-prompt
-;     (read-from-minibuffer prompt-string)
-;     :sys-prompt "You are an expert at Emacs, and Emacs Lisp, which is used to script and extend Emacs. You can understand natural language requests for actions to take within Emacs, then translate them to Emacs Lisp that carries out those actions.
-;
-;  Reply only in pure lisp expressions that can then be evaluated with \"eval-expression\". Do not include any comments or explanations. If the answer consists of multiple expressions, wrap them inside a \"progn\" form.")))
+;;;** Linux/X11
+;; set keyboard layout
+(defun setkeyboardlayout ()
+  (interactive)
+  (start-process "" nil "setxkbmap" "-layout" (completing-read "choose layout " '("us" "us -variant alt-gr-intl" "us -variant intl" "se" "fr" "el -variant polytonic" "es -variant cat" "ara -variant buckwalter"))))
 
 ;; launch programs and scripts
 (defun start-process-setkeyboardlayout ()
@@ -346,8 +339,6 @@
 (global-set-key (kbd "M-w") 'kill-ring-save-line-or-region)
 (global-set-key (kbd "C-s-x C-s-k") 'kill-all-buffers)
 
-;(global-set-key (kbd "M-\"") 'org-ai-elisp)
-
 ;; (org-mode) The following lines are always needed.  Choose your own keys.
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
@@ -394,10 +385,12 @@
 (global-set-key (kbd "C-c <down>") 'emms-pause)
 (global-set-key (kbd "C-c <up>") 'emms-play-directory)
 
-; keybindings for stuff outside of emacs
+; keybindings for linux/x11 stuff
+;; general
+(global-set-key (kbd "s-SPC") 'setkeyboardlayout)
+
 ;; launch programs and scripts
 (global-set-key (kbd "s-m") 'start-process-pcmanfm)
-(global-set-key (kbd "s-SPC") 'start-process-setkeyboardlayout)
 (global-set-key (kbd "s-c") 'start-process-passmenu-type)
 (global-set-key (kbd "s-f") 'start-process-firefox)
 (global-set-key (kbd "C-s-f") 'start-process-firefox-private-window)
