@@ -72,6 +72,7 @@
 (use-package dmenu :ensure t)
 (use-package addressbook-bookmark :ensure t)
 (use-package pinentry :ensure t)
+(use-package caps-lock :ensure t)
 ;;;** emms
 (use-package emms :ensure t
   :init
@@ -225,11 +226,27 @@
 (defun setkeyboardlayout ()
   (interactive)
   (start-process "" nil "setxkbmap" "-layout" (completing-read "choose layout " '("us" "us -variant alt-gr-intl" "us -variant intl" "se" "fr" "el -variant polytonic" "es -variant cat" "ara -variant buckwalter"))))
+(defun global-caps-lock-mode ()
+  (interactive)
+  (start-process "" nil "xdotool" "key" "Caps_Lock"))
+(defun grub-install ()
+  (interactive)
+  (async-shell-command "sudo grub-install --target=i386-pc /dev/sdb && sudo grub-mkconfig -o /boot/grub/grub.cfg"))
+(defun power-menu () ; unfinished
+  (interactive)
+  (defvar power-menu-option (completing-read "choose action " '("lock" "hibernate" "sleep" "log out" "reboot" "power off")))
+  (when (= power-menu-option '("lock"))
+    (start-process "" nil "slock"))
+  (when (= power-menu-option '"hibernate")
+    (start-process "" nil "systemctl" "hibernate"))
+  (when (= power-menu-option '"sleep")
+    (start-process "" nil "systemctl" "suspend"))
+  (when (= power-menu-option '"log out")
+    (defvar power-menu-tty (completing-read "which tty? " '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
+    )
+  )
 
 ;; launch programs and scripts
-(defun start-process-setkeyboardlayout ()
-  (interactive)
-  (start-process-shell-command "" nil "~/.local/bin/setkeyboardlayout.sh"))
 (defun start-process-trackpoint-configuration ()
   (interactive)
   (async-shell-command "sudo ~/.local/bin/trackpoint_configuration.sh"))
@@ -319,6 +336,9 @@
 (global-set-key (kbd "H-4") 'ctl-x-4-prefix)
 (global-set-key (kbd "H-5") 'ctl-x-5-prefix)
 (global-set-key (kbd "H-o") 'other-window)
+(global-set-key (kbd "H-x 2") 'split-root-window-below)
+(global-set-key (kbd "H-x 3") 'split-root-window-right)
+(global-set-key (kbd "H-x d") 'toggle-window-dedicated)
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "M-n") 'forward-paragraph)
 (global-set-key (kbd "C-<tab>") 'next-buffer)
@@ -364,6 +384,7 @@
 (global-set-key (kbd "H-a H-a") 'org-cycle-agenda-files)
 
 ; keybindings for extensions
+(global-set-key (kbd "H-<") 'caps-lock-mode)
 (global-set-key (kbd "C-c d") 'pdf-view-midnight-minor-mode)
 (global-set-key (kbd "C-c p") 'org-present)
 (global-set-key (kbd "C-<return>") 'vterm)
@@ -388,6 +409,7 @@
 ; keybindings for linux/x11 stuff
 ;; general
 (global-set-key (kbd "s-SPC") 'setkeyboardlayout)
+(global-set-key (kbd "H-`") 'global-caps-lock-mode)
 
 ;; launch programs and scripts
 (global-set-key (kbd "s-m") 'start-process-pcmanfm)
@@ -492,6 +514,9 @@
 (define-key exwm-mode-map (kbd "H-4") 'ctl-x-4-prefix)
 (define-key exwm-mode-map (kbd "H-5") 'ctl-x-5-prefix)
 (define-key exwm-mode-map (kbd "H-o") 'other-window)
+(define-key exwm-mode-map (kbd "H-x 2") 'split-root-window-below)
+(define-key exwm-mode-map (kbd "H-x 3") 'split-root-window-right)
+(define-key exwm-mode-map (kbd "H-x d") 'toggle-window-dedicated)
 (define-key exwm-mode-map (kbd "C-<tab>") 'next-buffer)
 (define-key exwm-mode-map (kbd "s-<tab>") 'previous-buffer)
 (define-key exwm-mode-map (kbd "H-<tab>") 'switch-to-buffer)
@@ -501,7 +526,8 @@
 (define-key exwm-mode-map (kbd "H-<return>") 'async-shell-command)
 (define-key exwm-mode-map (kbd "C-c C-f") 'exwm-layout-toggle-fullscreen)
 (define-key exwm-mode-map (kbd "s-m") 'start-process-pcmanfm)
-(define-key exwm-mode-map (kbd "s-SPC") 'start-process-setkeyboardlayout)
+(define-key exwm-mode-map (kbd "s-SPC") 'setkeyboardlayout)
+(define-key exwm-mode-map (kbd "H-`") 'global-caps-lock-mode)
 (define-key exwm-mode-map (kbd "s-c") 'start-process-passmenu-type)
 (define-key exwm-mode-map (kbd "s-f") 'start-process-firefox)
 (define-key exwm-mode-map (kbd "C-s-f") 'start-process-firefox-private-window)

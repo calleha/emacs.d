@@ -19,7 +19,7 @@
  '(org-export-backends '(ascii beamer html icalendar latex odt))
  '(org-export-with-toc nil)
  '(package-selected-packages
-   '(## addressbook-bookmark aider avy corfu dmenu emms exwm
+   '(## addressbook-bookmark aider avy caps-lock corfu dmenu emms exwm
 	exwm-modeline gnu-elpa-keyring-update gnuplot gnuplot-mode
 	god-mode gptel iedit magit multiple-cursors org-ai org-modern
 	org-present org-ref pdf-tools pinentry sudo-edit vertico
